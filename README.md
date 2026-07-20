@@ -1,61 +1,91 @@
 # Automotive Research Agent
 
-A Python-based research agent that searches the web, downloads relevant web pages, and generates structured research reports.
-
-This project is developed as part of an Automotive AI training project. The first version does **not** use any Large Language Model (LLM). The entire workflow is controlled by Python logic.
+A modular Python-based research agent that automatically searches the web, extracts the main content from webpages, generates structured summaries, and exports the results as a Markdown research report.
 
 ---
 
-# Version
+## Overview
 
-Current Version
+Automotive Research Agent automates the process of collecting technical information from the Internet.
 
-```
-v0.1
-```
+The system performs the following tasks:
 
-Status
+- Search relevant webpages
+- Filter low-quality search results
+- Download webpage content
+- Extract the main article text
+- Generate extractive summaries
+- Export a structured Markdown report
 
-```
-Project Structure Completed
-```
+The project follows a modular architecture, making it easy to extend with AI-powered summarization, RAG, or multi-agent workflows in future versions.
 
 ---
 
-# Features
+## Features
 
-Current Features
-
-- Python-based workflow
-- Modular architecture
-- Web search
-- Web page fetching
-- Local cache
+- Web search using DDGS
+- Candidate URL filtering
+- Intelligent page collection
+- Main content extraction using Trafilatura
+- BeautifulSoup fallback for unsupported webpages
+- Automatic text cleaning
+- Extractive summarization
 - Markdown report generation
-
-Future Features
-
-- Read local PDF documents
-- Combine local documents with web search results
-- AI planning
-- Azure OpenAI integration
-- Docker deployment
+- Modular architecture for future AI integration
 
 ---
 
-# Project Structure
+## Architecture
 
-```text
-automotive-research-agent
-│
-├── main.py
-├── agent.py
-│
-├── tools/
-│   ├── web_search.py
-│   ├── fetch_page.py
-│   ├── read_pdf.py
-│   └── export_report.py
+```
+                User
+                  │
+                  ▼
+          Automotive Research Agent
+                  │
+                  ▼
+             Search Engine
+                  │
+                  ▼
+             Fetch Engine
+      (Trafilatura + BS4 Fallback)
+                  │
+                  ▼
+            Summary Engine
+                  │
+                  ▼
+            Markdown Report
+```
+
+---
+
+## Workflow
+
+```
+User Input
+      │
+      ▼
+web_search.py
+      │
+      ▼
+fetch_page.py
+      │
+      ▼
+summarize.py
+      │
+      ▼
+export_report.py
+      │
+      ▼
+report.md
+```
+
+---
+
+## Project Structure
+
+```
+automotive-research-agent/
 │
 ├── docs/
 │
@@ -63,203 +93,101 @@ automotive-research-agent
 │   ├── cache/
 │   └── final/
 │
+├── tools/
+│   ├── web_search.py
+│   ├── fetch_page.py
+│   ├── summarize.py
+│   ├── export_report.py
+│   └── read_pdf.py
+│
+├── agent.py
+├── main.py
+├── README.md
 ├── requirements.txt
-└── README.md
+└── .gitignore
 ```
 
 ---
 
-# Architecture
+## Components
 
-## main.py
+### web_search.py
 
-Application entry point.
+Responsible for:
 
-Responsibilities
-
-- Start the application
-- Receive the research topic
-- Create the ResearchAgent
-- Start the workflow
+- Search webpages
+- Filter unwanted domains
+- Return candidate URLs
 
 ---
 
-## agent.py
+### fetch_page.py
 
-Workflow controller.
+Responsible for:
 
-Responsibilities
-
-- Coordinate the complete workflow
-- Call different tools
-- Manage the execution order
-- Finish the research process
-
-Workflow
-
-```text
-User Input
-      │
-      ▼
-Web Search
-      │
-      ▼
-Fetch Web Pages
-      │
-      ▼
-Generate Report
-      │
-      ▼
-Finish
-```
+- Download HTML
+- Extract webpage content
+- Trafilatura extraction
+- BeautifulSoup fallback
+- Text cleaning
+- Cache downloaded content
 
 ---
 
-## tools/web_search.py
+### summarize.py
 
-Searches the web.
+Responsible for:
 
-Input
-
-```
-Research Topic
-```
-
-Output
-
-```
-List of URLs
-```
+- Generate extractive summaries
+- Preserve page title
+- Preserve source URL
 
 ---
 
-## tools/fetch_page.py
+### export_report.py
 
-Downloads the web page content.
+Responsible for:
 
-Downloaded pages are stored inside
-
-```
-research/cache/
-```
+- Generate Markdown reports
+- Format research results
 
 ---
 
-## tools/export_report.py
+### agent.py
 
-Generates the final Markdown report.
-
-Output
-
-```
-research/final/report.md
-```
+Coordinates the complete research workflow.
 
 ---
 
-## docs/
+## Installation
 
-Reserved for local documents.
+Clone the repository
 
-Examples
+```bash
+git clone https://github.com/<your-account>/automotive-research-agent.git
 
-```
-AUTOSAR.pdf
-UNECE-R155.pdf
-ISO26262.pdf
+cd automotive-research-agent
 ```
 
-Not used in Version 1.
+Create virtual environment
 
----
-
-## research/cache/
-
-Temporary storage for downloaded web pages.
-
-Example
-
-```
-page1.txt
-page2.txt
-page3.txt
+```bash
+python -m venv .venv
 ```
 
----
+Activate virtual environment
 
-## research/final/
+Windows
 
-Stores the final research report.
-
-Example
-
-```
-report.md
+```bash
+.venv\Scripts\activate
 ```
 
----
+Linux / macOS
 
-# Workflow
-
-```text
-User
- │
- ▼
-main.py
- │
- ▼
-agent.py
- │
- ├───────────────┐
- │               │
- ▼               ▼
-web_search.py   read_pdf.py (Future)
- │
- ▼
-fetch_page.py
- │
- ▼
-research/cache/
- │
- ▼
-export_report.py
- │
- ▼
-research/final/report.md
- │
- ▼
-End
+```bash
+source .venv/bin/activate
 ```
-
----
-
-# Python Workflow
-
-The first version is implemented without any LLM.
-
-Workflow
-
-```
-User Input
-      │
-      ▼
-Python Logic
-      │
-      ▼
-Search
-      │
-      ▼
-Fetch
-      │
-      ▼
-Export Report
-```
-
-Future versions may replace the Python workflow controller with an AI Agent powered by Azure OpenAI.
-
----
-
-# Requirements
 
 Install dependencies
 
@@ -269,7 +197,18 @@ pip install -r requirements.txt
 
 ---
 
-# Run
+## Dependencies
+
+Core libraries:
+
+- requests
+- beautifulsoup4
+- trafilatura
+- ddgs
+
+---
+
+## Usage
 
 Run the application
 
@@ -277,42 +216,113 @@ Run the application
 python main.py
 ```
 
----
+Example
 
-# Roadmap
+```
+Enter research topic:
 
-Version 0.1
-
-- Project structure
-- Git repository
-- Basic workflow
-
-Version 0.2
-
-- Implement main.py
-
-Version 0.3
-
-- Implement ResearchAgent
-
-Version 0.4
-
-- Implement web search
-
-Version 0.5
-
-- Implement page fetching
-
-Version 0.6
-
-- Generate Markdown report
-
-Version 1.0
-
-- Complete working demo
+ADAS AI
+```
 
 ---
 
-# License
+## Example Output
 
-This project is created for learning and demonstration purposes.
+```
+Research Report
+
+Topic
+
+ADAS AI
+
+--------------------------------
+
+Source 1
+
+Title
+
+AI Technologies for ADAS Systems
+
+Summary
+
+ADAS systems combine computer vision,
+sensor fusion and AI algorithms to
+assist drivers and improve road safety.
+
+URL
+
+https://...
+```
+
+---
+
+## Current Version
+
+**Version: v1.0**
+
+### Implemented
+
+- DDGS web search
+- URL filtering
+- Candidate URL collection
+- Intelligent page collection
+- Trafilatura content extraction
+- BeautifulSoup fallback
+- Text cleaning
+- Extractive summary
+- Markdown report generation
+- Modular architecture
+
+---
+
+## Roadmap
+
+### Prototype
+
+- Web Search
+- BeautifulSoup Extraction
+- Raw Report
+
+---
+
+### v1.0 (Current)
+
+- Modular Research Pipeline
+- Intelligent Search Strategy
+- Content Extraction
+- Extractive Summary
+- Markdown Report
+
+---
+
+### v2.0
+
+- Azure OpenAI Summary
+- AI-generated research report
+
+---
+
+### v3.0
+
+- RAG
+- Vector Database
+- Multi-source Retrieval
+- Agent Memory
+
+---
+
+## Future Improvements
+
+- PDF content extraction
+- Search result ranking
+- Better extractive summarization
+- Azure OpenAI integration
+- Multi-agent collaboration
+- Web UI
+- REST API
+
+---
+
+## License
+
+This project is intended for educational and learning purposes.

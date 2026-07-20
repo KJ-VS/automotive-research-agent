@@ -1,15 +1,36 @@
 # Automotive Research Agent — Architecture
 
+## Overview
+
+The Automotive Research Agent is a modular Python application designed to automate technical research workflows.
+
+Current workflow:
+
+1. Search candidate URLs
+2. Download and extract web page content
+3. Generate extractive summaries
+4. Export a Markdown research report
+
+The modular architecture enables future extensions such as:
+
+- Azure OpenAI
+- RAG (Retrieval-Augmented Generation)
+- PDF document processing
+- Multi-Agent workflows
+
+---
+
 ## System Flow Diagram
 
 ```mermaid
 flowchart TD
+
     subgraph Input
         USER["👤 User"]
         TOPIC["📝 Research Topic"]
     end
 
-    subgraph Entry Point
+    subgraph EntryPoint
         MAIN["main.py<br/>Entry Point"]
     end
 
@@ -18,118 +39,243 @@ flowchart TD
     end
 
     subgraph Tools["tools/ Package"]
-        WS["web_search.py<br/>🔍 Web Search"]
-        FP["fetch_page.py<br/>📥 Fetch Pages"]
-        RP["read_pdf.py<br/>📄 Read PDFs"]
-        ER["export_report.py<br/>📊 Export Report"]
+        WS["🔍 Search Engine<br/>web_search.py"]
+        FP["📥 Fetch Engine<br/>fetch_page.py"]
+        SM["📝 Summary Engine<br/>summarize.py"]
+        RP["📄 PDF Reader (Future)<br/>read_pdf.py"]
+        ER["📊 Report Engine<br/>export_report.py"]
     end
 
     subgraph Storage
-        CACHE["research/cache/<br/>💾 Local Cache"]
-        FINAL["research/final/<br/>📁 Final Reports"]
+        CACHE["💾 research/cache"]
+        FINAL["📁 research/final"]
     end
 
     subgraph External
-        WEB["🌐 Internet<br/>Search Engines / Web Pages"]
-        PDF["📂 Local PDF<br/>Documents"]
+        WEB["🌐 Internet"]
+        PDF["📄 Local PDFs"]
     end
 
-    USER -->|"Enter topic"| MAIN
-    MAIN -->|"agent.run(topic)"| AGENT
-    AGENT -->|"1. Search"| WS
-    AGENT -->|"2. Fetch"| FP
-    AGENT -->|"3. Read PDFs (future)"| RP
-    AGENT -->|"4. Export"| ER
+    USER --> MAIN
+    MAIN --> AGENT
 
-    WS -->|"Query"| WEB
-    WEB -->|"Search Results"| WS
+    AGENT --> WS
+    WS --> WEB
+    WEB --> WS
 
-    FP -->|"Download"| WEB
-    WEB -->|"Page Content"| FP
-    FP -->|"Cache pages"| CACHE
+    WS --> FP
+    FP --> WEB
+    WEB --> FP
 
-    RP -->|"Read"| PDF
-    PDF -->|"Extracted Text"| RP
+    FP --> CACHE
 
-    ER -->|"Write report"| FINAL
+    FP --> SM
+    SM --> ER
+
+    AGENT -. Future .-> RP
+    RP --> PDF
+
+    ER --> FINAL
 ```
+
+---
 
 ## Component Diagram
 
 ```mermaid
 graph LR
-    subgraph "Automotive Research Agent"
-        direction TB
-        A[main.py] --> B[agent.py]
-        B --> C[tools/web_search.py]
-        B --> D[tools/fetch_page.py]
-        B --> E[tools/read_pdf.py]
-        B --> F[tools/export_report.py]
-    end
 
-    C --> G[(research/cache)]
-    D --> G
-    F --> H[(research/final)]
+subgraph Automotive_Research_Agent
+
+direction TB
+
+MAIN[main.py]
+
+AGENT[agent.py]
+
+SEARCH[web_search.py]
+
+FETCH[fetch_page.py]
+
+SUMMARY[summarize.py]
+
+PDF[read_pdf.py]
+
+REPORT[export_report.py]
+
+MAIN --> AGENT
+
+AGENT --> SEARCH
+
+SEARCH --> FETCH
+
+FETCH --> SUMMARY
+
+SUMMARY --> REPORT
+
+AGENT -. Future .-> PDF
+
+end
+
+FETCH --> CACHE[(research/cache)]
+
+REPORT --> FINAL[(research/final)]
 ```
+
+---
 
 ## Data Flow
 
 ```mermaid
 sequenceDiagram
-    actor User
-    participant main.py
-    participant ResearchAgent
-    participant web_search
-    participant fetch_page
-    participant export_report
-    participant Cache as research/cache
-    participant Output as research/final
 
-    User->>main.py: Enter research topic
-    main.py->>ResearchAgent: run(topic)
-    ResearchAgent->>web_search: web_search(topic)
-    web_search-->>ResearchAgent: search_results
-    ResearchAgent->>fetch_page: fetch_page(search_results)
-    fetch_page->>Cache: Store downloaded pages
-    fetch_page-->>ResearchAgent: pages
-    ResearchAgent->>export_report: export_report(topic, pages)
-    export_report->>Output: Write Markdown report
-    export_report-->>ResearchAgent: Done
-    ResearchAgent-->>User: Report generated
+actor User
+
+participant Main as main.py
+
+participant Agent as ResearchAgent
+
+participant Search as web_search
+
+participant Fetch as fetch_page
+
+participant Summary as summarize
+
+participant Report as export_report
+
+participant Cache as research/cache
+
+participant Output as research/final
+
+User->>Main: Enter topic
+
+Main->>Agent: run(topic)
+
+Agent->>Search: Search URLs
+
+Search-->>Agent: Candidate URLs
+
+Agent->>Fetch: Download pages
+
+Fetch->>Cache: Save cache
+
+Fetch-->>Agent: Extracted pages
+
+Agent->>Summary: Generate summaries
+
+Summary-->>Agent: Summaries
+
+Agent->>Report: Export report
+
+Report->>Output: report.md
+
+Report-->>Agent: Completed
+
+Agent-->>User: Report generated
 ```
+
+---
 
 ## Directory Structure
 
-```
+```text
 automotive-research-agent/
-├── main.py                 # Entry point — CLI interface
-├── agent.py                # Orchestrator — workflow logic
-├── requirements.txt        # Python dependencies
-├── README.md               # Project documentation
-├── .gitignore              # Git ignore rules
+│
+├── main.py
+├── agent.py
+├── README.md
+├── requirements.txt
+├── .gitignore
+│
 ├── docs/
-│   ├── .gitkeep
-│   └── architecture.md     # Architecture diagrams (this file)
+│   ├── architecture.md
+│   └── architecture.svg
+│
 ├── tools/
-│   ├── __init__.py         # (to be created)
-│   ├── web_search.py       # Web search tool
-│   ├── fetch_page.py       # Page fetching tool
-│   ├── read_pdf.py         # PDF reading tool
-│   └── export_report.py    # Report generation tool
+│   ├── web_search.py
+│   ├── fetch_page.py
+│   ├── summarize.py
+│   ├── read_pdf.py
+│   └── export_report.py
+│
 └── research/
-    ├── cache/              # Cached web page downloads
-    └── final/              # Generated research reports
+    ├── cache/
+    │   └── .gitkeep
+    └── final/
+        └── .gitkeep
 ```
+
+---
+
+## Current Workflow
+
+```text
+User
+   │
+   ▼
+main.py
+   │
+   ▼
+ResearchAgent
+   │
+   ▼
+Search Engine
+   │
+   ▼
+Fetch Engine
+   │
+   ▼
+Summary Engine
+   │
+   ▼
+Report Engine
+   │
+   ▼
+Markdown Report
+```
+
+---
 
 ## Implementation Status
 
-| Component | v0.1 | v0.2 | v1.0 |
-|---|---|---|---|
-| `main.py` | ✅ | ✅ | ✅ |
-| `agent.py` | ✅ | ✅ | ✅ |
-| `web_search.py` | ❌ | ✅ | ✅ |
-| `fetch_page.py` | ❌ | ✅ | ✅ |
-| `read_pdf.py` | ❌ | ❌ | ✅ |
-| `export_report.py` | ❌ | ✅ | ✅ |
-| LLM Integration | ❌ | ❌ | ❌ (future) |
-| Docker | ❌ | ❌ | ❌ (future) |
+| Component | Status |
+|-----------|--------|
+| main.py | ✅ |
+| agent.py | ✅ |
+| web_search.py | ✅ |
+| fetch_page.py | ✅ |
+| summarize.py | ✅ |
+| export_report.py | ✅ |
+| read_pdf.py | 🚧 Planned |
+| Azure OpenAI | 🚧 Future |
+| RAG | 🚧 Future |
+| Multi-Agent | 🚧 Future |
+| Docker | 🚧 Future |
+
+---
+
+## Future Roadmap
+
+### v1.1
+
+- Retry mechanism
+- Logging
+- Better error handling
+
+### v2.0
+
+- Azure OpenAI integration
+- AI-generated summaries
+
+### v3.0
+
+- Vector Database
+- RAG
+- Semantic Search
+
+### v4.0
+
+- Multi-Agent Workflow
+- Planning Agent
+- Retrieval Agent
+- Report Agent

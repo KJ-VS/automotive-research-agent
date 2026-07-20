@@ -12,3 +12,7 @@ venv/
 # Cache files
 research/cache/*
 !research/cache/.gitkeep
+
+# Generated reports
+research/final/*
+!research/final/.gitkeep

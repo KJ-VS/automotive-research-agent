@@ -1,1 +1,5 @@
-duckduckgo-search==8.1.1
+# Core project dependencies
+requests>=2.32
+beautifulsoup4>=4.13
+trafilatura>=2.1
+ddgs>=9.5
