@@ -1,160 +1,195 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 720" font-family="Segoe UI, Arial, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 760" width="100%" height="100%" style="background-color: #f8fafc; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
   <defs>
-    <marker id="arrow" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
-      <polygon points="0 0, 10 3.5, 0 7" fill="#555"/>
-    </marker>
-    <marker id="arrow-blue" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
-      <polygon points="0 0, 10 3.5, 0 7" fill="#2563eb"/>
-    </marker>
-    <linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#1e3a5f"/>
-      <stop offset="100%" style="stop-color:#2563eb"/>
-    </linearGradient>
-    <linearGradient id="inputGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" style="stop-color:#f0fdf4"/>
-      <stop offset="100%" style="stop-color:#dcfce7"/>
-    </linearGradient>
-    <linearGradient id="coreGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" style="stop-color:#eff6ff"/>
-      <stop offset="100%" style="stop-color:#dbeafe"/>
-    </linearGradient>
-    <linearGradient id="toolGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" style="stop-color:#fefce8"/>
-      <stop offset="100%" style="stop-color:#fef08a"/>
-    </linearGradient>
-    <linearGradient id="storageGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" style="stop-color:#fdf2f8"/>
-      <stop offset="100%" style="stop-color:#fce7f3"/>
-    </linearGradient>
-    <linearGradient id="externalGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" style="stop-color:#f5f5f5"/>
-      <stop offset="100%" style="stop-color:#e5e5e5"/>
-    </linearGradient>
-    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
-      <feDropShadow dx="1" dy="2" stdDeviation="3" flood-opacity="0.15"/>
+    <!-- 阴影滤镜 -->
+    <filter id="drop-shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#000000" flood-opacity="0.06"/>
     </filter>
+    
+    <!-- 箭头标记 -->
+    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#475569"/>
+    </marker>
+    <marker id="arrow-dashed" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#94a3b8"/>
+    </marker>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#2563eb"/>
+    </marker>
+
+    <!-- 渐变色定义 -->
+    <linearGradient id="header-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#1e3a8a"/>
+      <stop offset="100%" stop-color="#2563eb"/>
+    </linearGradient>
   </defs>
 
-  <!-- Background -->
-  <rect width="900" height="720" fill="#f8fafc" rx="8"/>
+  <!-- 1. 顶栏 Title -->
+  <rect x="20" y="20" width="980" height="48" rx="6" fill="url(#header-grad)"/>
+  <text x="480" y="50" text-anchor="middle" fill="#ffffff" font-size="18" font-weight="600" letter-spacing="0.5">Research Agent — System Architecture</text>
 
-  <!-- Title Bar -->
-  <rect x="0" y="0" width="900" height="48" fill="url(#headerGrad)" rx="8"/>
-  <rect x="0" y="24" width="900" height="24" fill="url(#headerGrad)"/>
-  <text x="450" y="31" text-anchor="middle" fill="white" font-size="18" font-weight="bold">Automotive Research Agent — System Architecture</text>
+  <!-- 2. INPUT 层 -->
+  <rect x="70" y="88" width="820" height="70" rx="8" fill="#e6f4ea" stroke="#ceead6" stroke-width="1.5"/>
+  <text x="90" y="108" fill="#137333" font-size="11" font-weight="700" letter-spacing="0.8">INPUT</text>
+  <!-- User 整体移动到水平中间 (x=480) -->
+  <g transform="translate(480, 110)">
+    <!-- 用户图标 (相对于组中心对齐) -->
+    <circle cx="-60" cy="12" r="8" fill="#5f6368"/>
+    <path d="M -72 28 C -72 21, -66 18, -60 18 C -54 18, -48 21, -48 28 Z" fill="#5f6368"/>
+    <!-- 文字靠图标右侧 (x=-38) -->
+    <text x="-38" y="15" fill="#202124" font-size="15" font-weight="600">User</text>
+    <text x="-38" y="31" fill="#5f6368" font-size="12">Initiates query / command</text>
+  </g>
 
-  <!-- ====== INPUT LAYER ====== -->
-  <rect x="50" y="70" width="800" height="70" rx="8" fill="url(#inputGrad)" stroke="#86efac" stroke-width="1.5" filter="url(#shadow)"/>
-  <text x="70" y="92" fill="#166534" font-size="11" font-weight="bold" opacity="0.7">INPUT</text>
-  <!-- User icon -->
-  <circle cx="130" cy="110" r="18" fill="#22c55e" opacity="0.15"/>
-  <text x="130" y="116" text-anchor="middle" font-size="20">👤</text>
-  <text x="160" y="108" fill="#166534" font-size="14" font-weight="bold">User</text>
-  <text x="160" y="124" fill="#166534" font-size="12">Enters research topic via CLI</text>
+  <!-- 3. ENTRY POINT 层 -->
+  <rect x="330" y="180" width="300" height="45" rx="8" fill="#e8f0fe" stroke="#aecbfa" stroke-width="1.5" filter="url(#drop-shadow)"/>
+  <text x="340" y="194" fill="#1a73e8" font-size="9" font-weight="700" letter-spacing="0.8">ENTRY POINT</text>
+  <text x="480" y="208" text-anchor="middle" fill="#202124" font-size="14" font-weight="600" font-family="monospace">main.py</text>
 
-  <!-- Arrow: Input -> main.py -->
-  <line x1="450" y1="140" x2="450" y2="170" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow-blue)"/>
+  <!-- 4. ORCHESTRATOR 层 -->
+  <rect x="230" y="250" width="500" height="50" rx="8" fill="#e8f0fe" stroke="#aecbfa" stroke-width="1.5" filter="url(#drop-shadow)"/>
+  <text x="240" y="264" fill="#1a73e8" font-size="9" font-weight="700" letter-spacing="0.8">ORCHESTRATOR</text>
+  <text x="480" y="281" text-anchor="middle" fill="#202124" font-size="14" font-weight="600" font-family="monospace">agent.py — ResearchAgent.run()</text>
 
-  <!-- ====== ENTRY POINT ====== -->
-  <rect x="300" y="175" width="300" height="55" rx="8" fill="url(#coreGrad)" stroke="#93c5fd" stroke-width="1.5" filter="url(#shadow)"/>
-  <text x="320" y="196" fill="#1e40af" font-size="11" font-weight="bold" opacity="0.7">ENTRY POINT</text>
-  <text x="450" y="214" text-anchor="middle" fill="#1e3a5f" font-size="15" font-weight="bold">main.py</text>
+  <!-- ============================== -->
+  <!-- 5. 工具层 -->
+  <!-- ============================== -->
 
-  <!-- Arrow: main.py -> agent.py -->
-  <line x1="450" y1="230" x2="450" y2="260" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow-blue)"/>
+  <!-- 5.1 核心流水线分组 -->
+  <g transform="translate(30, 330)">
+    <rect x="0" y="0" width="700" height="110" rx="10" fill="#fffef0" stroke="#fde293" stroke-width="1" stroke-dasharray="2,2"/>
+    <text x="10" y="18" fill="#b06000" font-size="10" font-weight="700" letter-spacing="0.8">CORE MODULES PIPELINE</text>
 
-  <!-- ====== ORCHESTRATOR ====== -->
-  <rect x="250" y="265" width="400" height="55" rx="8" fill="url(#coreGrad)" stroke="#93c5fd" stroke-width="1.5" filter="url(#shadow)"/>
-  <text x="270" y="286" fill="#1e40af" font-size="11" font-weight="bold" opacity="0.7">ORCHESTRATOR</text>
-  <text x="450" y="304" text-anchor="middle" fill="#1e3a5f" font-size="15" font-weight="bold">agent.py — ResearchAgent.run()</text>
+    <!-- Search Engine -->
+    <g transform="translate(15, 25)">
+      <rect x="0" y="0" width="160" height="70" rx="8" fill="#fef7e0" stroke="#fde293" stroke-width="1.5" filter="url(#drop-shadow)"/>
+      <text x="80" y="28" text-anchor="middle" fill="#202124" font-size="13" font-weight="600">Search Engine</text>
+      <text x="80" y="48" text-anchor="middle" fill="#b06000" font-size="12" font-family="monospace">web_search.py</text>
+    </g>
 
-  <!-- Arrows: agent.py -> Tools -->
-  <line x1="310" y1="320" x2="130" y2="370" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <line x1="390" y1="320" x2="310" y2="370" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <line x1="510" y1="320" x2="590" y2="370" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <line x1="590" y1="320" x2="770" y2="370" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <!-- Fetch Engine -->
+    <g transform="translate(185, 25)">
+      <rect x="0" y="0" width="160" height="70" rx="8" fill="#fef7e0" stroke="#fde293" stroke-width="1.5" filter="url(#drop-shadow)"/>
+      <text x="80" y="28" text-anchor="middle" fill="#202124" font-size="13" font-weight="600">Fetch Engine</text>
+      <text x="80" y="48" text-anchor="middle" fill="#b06000" font-size="12" font-family="monospace">fetch_page.py</text>
+    </g>
 
-  <!-- Step labels on arrows -->
-  <text x="200" y="340" fill="#6b7280" font-size="10">1. Search</text>
-  <text x="340" y="340" fill="#6b7280" font-size="10">2. Fetch</text>
-  <text x="540" y="340" fill="#6b7280" font-size="10">3. Read PDFs</text>
-  <text x="650" y="340" fill="#6b7280" font-size="10">4. Export</text>
+    <!-- Summary Engine -->
+    <g transform="translate(355, 25)">
+      <rect x="0" y="0" width="160" height="70" rx="8" fill="#fef7e0" stroke="#fde293" stroke-width="1.5" filter="url(#drop-shadow)"/>
+      <text x="80" y="28" text-anchor="middle" fill="#202124" font-size="13" font-weight="600">Summary Engine</text>
+      <text x="80" y="48" text-anchor="middle" fill="#b06000" font-size="12" font-family="monospace">summarize.py</text>
+    </g>
 
-  <!-- ====== TOOLS LAYER ====== -->
-  <!-- web_search -->
-  <rect x="50" y="375" width="170" height="70" rx="8" fill="url(#toolGrad)" stroke="#facc15" stroke-width="1.5" filter="url(#shadow)"/>
-  <text x="135" y="398" text-anchor="middle" fill="#854d0e" font-size="11" font-weight="bold">🔍 web_search.py</text>
-  <text x="135" y="416" text-anchor="middle" fill="#a16207" font-size="10">Web Search</text>
-  <text x="135" y="432" text-anchor="middle" fill="#ca8a04" font-size="9">Query search engines</text>
+    <!-- Report Engine -->
+    <g transform="translate(525, 25)">
+      <rect x="0" y="0" width="160" height="70" rx="8" fill="#fef7e0" stroke="#fde293" stroke-width="1.5" filter="url(#drop-shadow)"/>
+      <text x="80" y="28" text-anchor="middle" fill="#202124" font-size="13" font-weight="600">Report Engine</text>
+      <text x="80" y="48" text-anchor="middle" fill="#b06000" font-size="12" font-family="monospace">export_report.py</text>
+    </g>
 
-  <!-- fetch_page -->
-  <rect x="240" y="375" width="170" height="70" rx="8" fill="url(#toolGrad)" stroke="#facc15" stroke-width="1.5" filter="url(#shadow)"/>
-  <text x="325" y="398" text-anchor="middle" fill="#854d0e" font-size="11" font-weight="bold">📥 fetch_page.py</text>
-  <text x="325" y="416" text-anchor="middle" fill="#a16207" font-size="10">Fetch Pages</text>
-  <text x="325" y="432" text-anchor="middle" fill="#ca8a04" font-size="9">Download web pages</text>
+    <!-- 流水线连线 -->
+    <path d="M 175 60 L 185 60" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <path d="M 345 60 L 355 60" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <path d="M 515 60 L 525 60" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)"/>
+  </g>
 
-  <!-- read_pdf -->
-  <rect x="430" y="375" width="170" height="70" rx="8" fill="url(#toolGrad)" stroke="#facc15" stroke-width="1.5" filter="url(#shadow)" opacity="0.6"/>
-  <text x="515" y="398" text-anchor="middle" fill="#854d0e" font-size="11" font-weight="bold">📄 read_pdf.py</text>
-  <text x="515" y="416" text-anchor="middle" fill="#a16207" font-size="10">Read PDFs</text>
-  <text x="515" y="432" text-anchor="middle" fill="#ca8a04" font-size="9">(future feature)</text>
+  <!-- 5.2 PDF 处理分组 -->
+  <g transform="translate(745, 330)">
+    <rect x="0" y="0" width="185" height="110" rx="10" fill="#f0fdf4" stroke="#ceead6" stroke-width="1.5" stroke-dasharray="4,3"/>
+    <text x="10" y="18" fill="#137333" font-size="10" font-weight="700" letter-spacing="0.8">Local PDF Handling (Future)</text>
 
-  <!-- export_report -->
-  <rect x="620" y="375" width="170" height="70" rx="8" fill="url(#toolGrad)" stroke="#facc15" stroke-width="1.5" filter="url(#shadow)"/>
-  <text x="705" y="398" text-anchor="middle" fill="#854d0e" font-size="11" font-weight="bold">📊 export_report.py</text>
-  <text x="705" y="416" text-anchor="middle" fill="#a16207" font-size="10">Export Report</text>
-  <text x="705" y="432" text-anchor="middle" fill="#ca8a04" font-size="9">Generate Markdown</text>
+    <!-- PDF Reader -->
+    <g transform="translate(12.5, 25)">
+      <rect x="0" y="0" width="160" height="70" rx="8" fill="#ffffff" stroke="#ceead6" stroke-width="1.5" filter="url(#drop-shadow)"/>
+      <text x="80" y="32" text-anchor="middle" fill="#188038" font-size="13" font-weight="600">PDF Reader</text>
+      <text x="80" y="52" text-anchor="middle" fill="#b06000" font-size="12" font-family="monospace">read_pdf.py</text>
+    </g>
+  </g>
 
-  <!-- ====== EXTERNAL SYSTEMS ====== -->
+  <!-- ============================== -->
+  <!-- 6. EXTERNAL / STORAGE 底层 -->
+  <!-- ============================== -->
+
   <!-- Internet -->
-  <rect x="50" y="480" width="170" height="55" rx="8" fill="url(#externalGrad)" stroke="#d4d4d4" stroke-width="1.5" filter="url(#shadow)"/>
-  <text x="135" y="503" text-anchor="middle" fill="#525252" font-size="12" font-weight="bold">🌐 Internet</text>
-  <text x="135" y="521" text-anchor="middle" fill="#737373" font-size="10">Search Engines / Web Pages</text>
+  <g transform="translate(30, 520)">
+    <rect x="0" y="0" width="175" height="60" rx="8" fill="#f1f3f4" stroke="#dadce0" stroke-width="1.5"/>
+    <text x="87.5" y="28" text-anchor="middle" fill="#3c4043" font-size="13" font-weight="600">Internet</text>
+    <text x="87.5" y="45" text-anchor="middle" fill="#70757a" font-size="11">Web Search Engine</text>
+  </g>
 
-  <!-- Local PDFs -->
-  <rect x="430" y="480" width="170" height="55" rx="8" fill="url(#externalGrad)" stroke="#d4d4d4" stroke-width="1.5" filter="url(#shadow)" opacity="0.6"/>
-  <text x="515" y="503" text-anchor="middle" fill="#525252" font-size="12" font-weight="bold">📂 Local PDFs</text>
-  <text x="515" y="521" text-anchor="middle" fill="#737373" font-size="10">(future feature)</text>
+  <!-- Storage 容器包围盒 -->
+  <rect x="215" y="505" width="715" height="115" rx="8" fill="#fce8e6" stroke="#fad2cf" stroke-width="1.5"/>
+  <text x="230" y="523" fill="#c5221f" font-size="10" font-weight="700" letter-spacing="0.8">STORAGE</text>
 
-  <!-- Arrows: Tools -> External -->
-  <line x1="135" y1="445" x2="135" y2="475" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <line x1="325" y1="445" x2="325" y2="475" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <line x1="515" y1="445" x2="515" y2="475" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <!-- Cache Dir -->
+  <g transform="translate(230, 540)">
+    <rect x="0" y="0" width="280" height="48" rx="6" fill="#ffffff" stroke="#f28b82" stroke-width="1.2"/>
+    <text x="140" y="22" text-anchor="middle" fill="#b0120a" font-size="12" font-weight="600" font-family="monospace">research/cache/</text>
+    <text x="140" y="38" text-anchor="middle" fill="#5f6368" font-size="11">Local HTML &amp; Raw Data Cache</text>
+  </g>
 
-  <!-- Return arrows -->
-  <line x1="155" y1="480" x2="155" y2="450" stroke="#9ca3af" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
-  <line x1="345" y1="480" x2="345" y2="450" stroke="#9ca3af" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
+  <!-- Final Dir -->
+  <g transform="translate(630, 540)">
+    <rect x="0" y="0" width="280" height="48" rx="6" fill="#ffffff" stroke="#f28b82" stroke-width="1.2"/>
+    <text x="140" y="22" text-anchor="middle" fill="#b0120a" font-size="12" font-weight="600" font-family="monospace">research/final/</text>
+    <text x="140" y="38" text-anchor="middle" fill="#5f6368" font-size="11">Generated Reports &amp; Outputs</text>
+  </g>
 
-  <!-- ====== STORAGE LAYER ====== -->
-  <rect x="50" y="570" width="800" height="65" rx="8" fill="url(#storageGrad)" stroke="#f9a8d4" stroke-width="1.5" filter="url(#shadow)"/>
-  <text x="70" y="592" fill="#9d174d" font-size="11" font-weight="bold" opacity="0.7">STORAGE</text>
+  <!-- ============================== -->
+  <!-- 7. 连接线与流向 -->
+  <!-- ============================== -->
 
-  <!-- Cache -->
-  <rect x="80" y="600" width="300" height="25" rx="4" fill="#fce7f3" stroke="#f9a8d4" stroke-width="1"/>
-  <text x="230" y="617" text-anchor="middle" fill="#9d174d" font-size="11">💾 research/cache/ — Local page cache</text>
+  <!-- User -> main.py -->
+  <path d="M 480 158 L 480 180" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
 
-  <!-- Final Reports -->
-  <rect x="420" y="600" width="300" height="25" rx="4" fill="#fce7f3" stroke="#f9a8d4" stroke-width="1"/>
-  <text x="570" y="617" text-anchor="middle" fill="#9d174d" font-size="11">📁 research/final/ — Generated reports</text>
+  <!-- main.py -> ResearchAgent -->
+  <path d="M 480 225 L 480 250" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
 
-  <!-- Arrows: Tools -> Storage -->
-  <line x1="325" y1="445" x2="230" y2="595" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <line x1="705" y1="445" x2="570" y2="595" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <!-- Agent 调用流水线头部 -->
+  <path d="M 430 300 L 125 355" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+  
+  <!-- Agent 调用 PDF (虚线) -->
+  <path d="M 530 300 L 837 355" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrow-dashed)"/>
 
-  <!-- ====== LEGEND ====== -->
-  <rect x="50" y="655" width="800" height="50" rx="6" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="1"/>
-  <text x="70" y="675" fill="#475569" font-size="11" font-weight="bold">Legend:</text>
-  <rect x="140" y="663" width="14" height="14" rx="3" fill="url(#coreGrad)" stroke="#93c5fd" stroke-width="1"/>
-  <text x="160" y="675" fill="#475569" font-size="10">Core</text>
-  <rect x="210" y="663" width="14" height="14" rx="3" fill="url(#toolGrad)" stroke="#facc15" stroke-width="1"/>
-  <text x="230" y="675" fill="#475569" font-size="10">Tools</text>
-  <rect x="280" y="663" width="14" height="14" rx="3" fill="url(#storageGrad)" stroke="#f9a8d4" stroke-width="1"/>
-  <text x="300" y="675" fill="#475569" font-size="10">Storage</text>
-  <rect x="365" y="663" width="14" height="14" rx="3" fill="url(#externalGrad)" stroke="#d4d4d4" stroke-width="1"/>
-  <text x="385" y="675" fill="#475569" font-size="10">External</text>
-  <line x1="450" y1="670" x2="480" y2="670" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow-blue)"/>
-  <text x="488" y="675" fill="#475569" font-size="10">Data flow</text>
-  <line x1="555" y1="670" x2="585" y2="670" stroke="#9ca3af" stroke-width="1" stroke-dasharray="4,3"/>
-  <text x="593" y="675" fill="#475569" font-size="10">Return</text>
-  <text x="650" y="675" fill="#94a3b8" font-size="10">v0.1 — Scaffolding Phase</text>
+  <!-- Tools -> External / Storage 下向连线 -->
+  <!-- Search Engine -> Internet -->
+  <path d="M 110 400 L 110 520" stroke="#475569" stroke-width="1" marker-end="url(#arrow)"/>
+
+  <!-- Fetch Engine -> cache -->
+  <path d="M 280 400 L 340 540" stroke="#475569" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+  <!-- Report Engine -> final -->
+  <path d="M 620 400 L 730 540" stroke="#475569" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+  <!-- PDF Reader (Future) -> final (虚线) -->
+  <path d="M 837 400 L 770 540" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arrow-dashed)"/>
+
+  <!-- 8. 图例 -->
+  <g transform="translate(20, 680)">
+    <rect x="0" y="0" width="980" height="50" rx="6" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+    <text x="20" y="30" fill="#475569" font-size="12" font-weight="700">Legend:</text>
+    
+    <!-- Core -->
+    <rect x="90" y="18" width="18" height="18" rx="4" fill="#e8f0fe" stroke="#aecbfa"/>
+    <text x="115" y="32" fill="#334155" font-size="12">Core Engine</text>
+
+    <!-- Tools -->
+    <rect x="210" y="18" width="18" height="18" rx="4" fill="#fef7e0" stroke="#fde293"/>
+    <text x="235" y="32" fill="#334155" font-size="12">Tools (Current)</text>
+
+    <!-- Storage -->
+    <rect x="360" y="18" width="18" height="18" rx="4" fill="#fce8e6" stroke="#fad2cf"/>
+    <text x="385" y="32" fill="#334155" font-size="12">Local Storage</text>
+
+    <!-- External -->
+    <rect x="500" y="18" width="18" height="18" rx="4" fill="#f1f3f4" stroke="#dadce0"/>
+    <text x="525" y="32" fill="#334155" font-size="12">External</text>
+
+    <!-- Arrows -->
+    <line x1="610" y1="27" x2="640" y2="27" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <text x="648" y="32" fill="#334155" font-size="12">Internal Flow</text>
+
+    <line x1="770" y1="27" x2="800" y2="27" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrow-dashed)"/>
+    <text x="808" y="32" fill="#334155" font-size="12">Future Flow (Tools &amp; Data)</text>
+  </g>
 </svg>
