@@ -16,3 +16,6 @@ research/cache/*
 # Generated reports
 research/final/*
 !research/final/.gitkeep
+
+# Streamlit
+.agents/

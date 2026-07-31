@@ -1,4 +1,4 @@
-from agent import ResearchAgent
+from backend.agent import ResearchAgent
 
 
 def main():

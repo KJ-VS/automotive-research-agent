@@ -3,3 +3,4 @@ requests>=2.32
 beautifulsoup4>=4.13
 trafilatura>=2.1
 ddgs>=9.5
+streamlit>=1.30
