@@ -1,10 +1,41 @@
-# Automotive Research Agent
+# 🚗 Automotive Research Agent
 
-A modular Python-based research agent that automatically searches the web, extracts the main content from webpages, generates structured summaries, and exports the results as a Markdown research report.
+An enterprise-oriented research platform for automotive technology research.
+
+The project started as a rule-based research pipeline and is gradually evolving into an enterprise AI research platform with Web UI, LLM, RAG, and Multi-Agent capabilities.
 
 ---
 
-## Overview
+# Current Status
+
+**Current Version**
+
+🚧 **V1.1 (In Development)**
+
+Latest completed milestone:
+
+- Project refactoring
+- Modular architecture
+- Streamlit dashboard prototype
+- Backend / UI separation
+- YAML configuration
+
+---
+
+# Roadmap
+
+| Version | Status | Description |
+|----------|--------|-------------|
+| Prototype | ✅ Completed | Initial research prototype |
+| V1.0 | ✅ Released | Rule-based CLI research engine |
+| V1.1 | 🚧 In Development | Web dashboard & modular architecture |
+| V2.0 | ⏳ Planned | LLM-powered research assistant |
+| V3.0 | ⏳ Planned | Enterprise RAG platform |
+| V4.0 | ⏳ Planned | Multi-Agent AI research platform |
+
+---
+
+# Overview
 
 Automotive Research Agent automates the process of collecting technical information from the Internet.
 
@@ -13,153 +44,159 @@ The system performs the following tasks:
 - Search relevant webpages
 - Filter low-quality search results
 - Download webpage content
-- Extract the main article text
-- Generate extractive summaries
-- Export a structured Markdown report
+- Extract the main article
+- Generate structured summaries
+- Export research reports
 
-The project follows a modular architecture, making it easy to extend with AI-powered summarization, RAG, or multi-agent workflows in future versions.
+The project is designed with a modular architecture to support future AI capabilities such as:
+
+- Azure OpenAI
+- RAG
+- Enterprise Knowledge Base
+- Multi-Agent Workflow
 
 ---
 
-## Features
+# Features
 
-- Web search using DDGS
+## V1.0
+
+- Rule-based web search
 - Candidate URL filtering
-- Intelligent page collection
-- Main content extraction using Trafilatura
-- BeautifulSoup fallback for unsupported webpages
-- Automatic text cleaning
+- Intelligent webpage collection
+- Trafilatura content extraction
+- BeautifulSoup fallback
 - Extractive summarization
 - Markdown report generation
-- Modular architecture for future AI integration
+
+## V1.1
+
+- Streamlit dashboard
+- Modular backend architecture
+- Configuration management
+- Web UI prototype
 
 ---
 
-## Architecture
+# System Architecture
 
 ```
-                User
-                  │
-                  ▼
-          Automotive Research Agent
-                  │
-                  ▼
-             Search Engine
-                  │
-                  ▼
-             Fetch Engine
-      (Trafilatura + BS4 Fallback)
-                  │
-                  ▼
-            Summary Engine
-                  │
-                  ▼
-            Markdown Report
-```
-
----
-
-## Workflow
-
-```
-User Input
-      │
-      ▼
-web_search.py
-      │
-      ▼
-fetch_page.py
-      │
-      ▼
-summarize.py
-      │
-      ▼
-export_report.py
-      │
-      ▼
-report.md
+                  Browser / CLI
+                       │
+                       ▼
+         Automotive Research Dashboard
+                       │
+                       ▼
+                  Controller
+                       │
+                       ▼
+                    Workflow
+                       │
+                       ▼
+                Research Agent
+                       │
+        ┌──────────────┼──────────────┐
+        ▼              ▼              ▼
+     Search         Fetch         Summary
+        │              │              │
+        └──────────────┼──────────────┘
+                       ▼
+                  Markdown Report
 ```
 
 ---
 
-## Project Structure
+# Project Structure
 
-```
+```text
 automotive-research-agent/
+
+├── backend/
+│   ├── agent.py
+│   ├── controller.py
+│   ├── workflow.py
+│   └── config.py
+│
+├── config/
+│   ├── config.yaml
+│   └── domains.yaml
 │
 ├── docs/
+│   ├── architecture.md
+│   └── architecture.svg
+│
+├── logs/
 │
 ├── research/
-│   ├── cache/
-│   └── final/
+│
+├── tests/
 │
 ├── tools/
-│   ├── web_search.py
-│   ├── fetch_page.py
-│   ├── summarize.py
-│   ├── export_report.py
-│   └── read_pdf.py
 │
-├── agent.py
+├── ui/
+│   ├── dashboard.py
+│   ├── sidebar.py
+│   ├── progress.py
+│   ├── statistics.py
+│   └── report.py
+│
+├── app.py
 ├── main.py
 ├── README.md
+├── CHANGELOG.md
 ├── requirements.txt
 └── .gitignore
 ```
 
 ---
 
-## Components
+# Components
 
-### web_search.py
+## backend
 
-Responsible for:
+Responsible for coordinating the complete research workflow.
 
-- Search webpages
-- Filter unwanted domains
-- Return candidate URLs
-
----
-
-### fetch_page.py
-
-Responsible for:
-
-- Download HTML
-- Extract webpage content
-- Trafilatura extraction
-- BeautifulSoup fallback
-- Text cleaning
-- Cache downloaded content
+- Agent
+- Controller
+- Workflow
+- Configuration
 
 ---
 
-### summarize.py
+## tools
 
-Responsible for:
+Provides reusable tools including:
 
-- Generate extractive summaries
-- Preserve page title
-- Preserve source URL
-
----
-
-### export_report.py
-
-Responsible for:
-
-- Generate Markdown reports
-- Format research results
+- Web search
+- Content extraction
+- Summarization
+- Report generation
 
 ---
 
-### agent.py
+## ui
 
-Coordinates the complete research workflow.
+Responsible for the Streamlit dashboard.
+
+- Dashboard
+- Sidebar
+- Progress
+- Statistics
+- Report Preview
 
 ---
 
-## Installation
+## config
+
+Stores project configuration.
+
+- Search settings
+- Domain filtering
+- Future LLM configuration
+
+---
+
+# Installation
 
 Clone the repository
 
@@ -197,132 +234,84 @@ pip install -r requirements.txt
 
 ---
 
-## Dependencies
+# Quick Start
 
-Core libraries:
-
-- requests
-- beautifulsoup4
-- trafilatura
-- ddgs
-
----
-
-## Usage
-
-Run the application
+## CLI Version
 
 ```bash
 python main.py
 ```
 
-Example
+## Web Dashboard
 
-```
-Enter research topic:
-
-ADAS AI
+```bash
+streamlit run app.py
 ```
 
 ---
 
-## Example Output
+# Dependencies
 
-```
-Research Report
+Core libraries
 
-Topic
-
-ADAS AI
-
---------------------------------
-
-Source 1
-
-Title
-
-AI Technologies for ADAS Systems
-
-Summary
-
-ADAS systems combine computer vision,
-sensor fusion and AI algorithms to
-assist drivers and improve road safety.
-
-URL
-
-https://...
-```
+- requests
+- beautifulsoup4
+- trafilatura
+- ddgs
+- streamlit
 
 ---
 
-## Current Version
+# Current Development
 
-**Version: v1.0**
+V1.1 currently focuses on building the software architecture rather than AI capabilities.
 
-### Implemented
+Current milestones include:
 
-- DDGS web search
-- URL filtering
-- Candidate URL collection
-- Intelligent page collection
-- Trafilatura content extraction
-- BeautifulSoup fallback
-- Text cleaning
-- Extractive summary
-- Markdown report generation
-- Modular architecture
+- Repository refactoring
+- Streamlit dashboard
+- UI modularization
+- Controller integration
+- Workflow orchestration
 
 ---
 
-## Roadmap
+# Future Versions
 
-### Prototype
+## V2
 
-- Web Search
-- BeautifulSoup Extraction
-- Raw Report
-
----
-
-### v1.0 (Current)
-
-- Modular Research Pipeline
-- Intelligent Search Strategy
-- Content Extraction
-- Extractive Summary
-- Markdown Report
+- Azure OpenAI integration
+- AI-generated summaries
+- Interactive report generation
 
 ---
 
-### v2.0
-
-- Azure OpenAI Summary
-- AI-generated research report
-
----
-
-### v3.0
+## V3
 
 - RAG
-- Vector Database
-- Multi-source Retrieval
-- Agent Memory
+- Vector database
+- Enterprise knowledge retrieval
+- Multi-source search
 
 ---
 
-## Future Improvements
+## V4
 
-- PDF content extraction
-- Search result ranking
-- Better extractive summarization
-- Azure OpenAI integration
-- Multi-agent collaboration
-- Web UI
-- REST API
+- Multi-Agent orchestration
+- Planner Agent
+- Search Agent
+- Summary Agent
+- Report Agent
+- Enterprise AI Platform
 
 ---
 
-## License
+# Changelog
+
+See **CHANGELOG.md** for detailed version history.
+
+---
+
+# License
 
 This project is intended for educational and learning purposes.
