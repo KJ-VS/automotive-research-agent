@@ -1,126 +1,97 @@
 import streamlit as st
 
+from ui.sidebar import show_sidebar
+from ui.progress import show_status
+from ui.statistics import show_statistics
+from ui.report import show_report
+
 
 def show_dashboard():
 
-    # ----------------------------------------------------
+    # ==========================================
+    # Sidebar
+    # ==========================================
+
+    settings = show_sidebar()
+
+    # ==========================================
     # Header
-    # ----------------------------------------------------
+    # ==========================================
+
     title_col, version_col = st.columns([8, 2])
 
     with title_col:
+
         st.title("🚗 Automotive Research Dashboard")
+        st.caption("Enterprise AI Research Platform")
 
     with version_col:
-        st.markdown("### ")
-        st.markdown("**Version 1.1**")
 
-    st.caption("Rule-Based Research Pipeline")
-
-    st.divider()
-
-    # ----------------------------------------------------
-    # Main Layout
-    # ----------------------------------------------------
-
-    sidebar, workspace = st.columns([1, 3])
-
-    # ====================================================
-    # Left Panel
-    # ====================================================
-
-    with sidebar:
-
-        st.subheader("Settings")
-
-        st.selectbox(
-            "Search Engine",
-            ["DuckDuckGo"]
-        )
-
-        st.selectbox(
-            "Language",
-            ["English", "German"]
-        )
-
-        st.slider(
-            "Max Results",
-            5,
-            20,
-            10
-        )
-
-        st.selectbox(
-            "Output",
-            ["Markdown", "PDF"]
-        )
-
-    # ====================================================
-    # Right Panel
-    # ====================================================
-
-    with workspace:
-
-        st.subheader("Research Question")
-
-        topic = st.text_input(
-            "",
-            placeholder="Enter your research topic..."
-        )
-
-        if st.button(
-            "🚀 Start Research",
-            use_container_width=True
-        ):
-            st.info(f"Research Topic: {topic}")
+        st.markdown("###")
+        st.success("V1.1")
 
     st.divider()
 
-    # ----------------------------------------------------
-    # Status + Statistics
-    # ----------------------------------------------------
+    # ==========================================
+    # Research Question
+    # ==========================================
 
-    left, right = st.columns([1, 3])
+    st.subheader("Research Question")
 
-    with left:
-
-        st.subheader("Status")
-
-        st.success("🟢 Ready")
-
-    with right:
-
-        st.subheader("Statistics")
-
-        c1, c2, c3, c4 = st.columns(4)
-
-        c1.metric("Retrieved", 0)
-        c2.metric("Filtered", 0)
-        c3.metric("Downloaded", 0)
-        c4.metric("Time", "0 s")
-
-    st.divider()
-
-    # ----------------------------------------------------
-    # Report
-    # ----------------------------------------------------
-
-    report_col, download_col = st.columns([8, 1])
-
-    with report_col:
-        st.subheader("Report Preview")
-
-    with download_col:
-        st.markdown("### ")
-        st.button("📄 Export")
-
-    st.text_area(
-        "",
-        value="No report generated.",
-        height=180,
-        disabled=True
+    research_question = st.text_area(
+        label="",
+        placeholder="What would you like to research today?",
+        height=140
     )
 
+    start_button = st.button(
+        "🚀 Start Research",
+        use_container_width=True,
+        type="primary"
+    )
+
+    # ==========================================
+    # Temporary Debug
+    # ==========================================
+
+    if start_button:
+
+        st.toast("Research pipeline will start here.")
+
+        with st.expander("Current Settings"):
+
+            st.json(settings)
+
+            st.write("Question:")
+
+            st.write(research_question)
+
     st.divider()
 
-    st.caption("Automotive Research Agent • Version 1.1")
+    # ==========================================
+    # Status
+    # ==========================================
+
+    show_status()
+
+    st.divider()
+
+    # ==========================================
+    # Statistics
+    # ==========================================
+
+    show_statistics()
+
+    st.divider()
+
+    # ==========================================
+    # Report Preview
+    # ==========================================
+
+    show_report()
+
+    st.divider()
+
+    st.caption(
+        "© 2026 Automotive Research Agent | Version 1.1"
+    )

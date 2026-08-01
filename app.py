@@ -4,9 +4,17 @@ from ui.dashboard import show_dashboard
 
 
 st.set_page_config(
-    page_title="Automotive Research Dashboard",
+    page_title="Automotive Research Agent",
     page_icon="🚗",
-    layout="wide"
+    layout="wide",
+    initial_sidebar_state="expanded"
 )
 
-show_dashboard()
+
+def main():
+
+    show_dashboard()
+
+
+if __name__ == "__main__":
+    main()
