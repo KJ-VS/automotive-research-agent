@@ -1,35 +1,50 @@
 import streamlit as st
 
 
-def show_statistics():
+def show_statistics(statistics: dict | None):
     """
-    Display research statistics.
+    Display workflow statistics.
     """
 
     st.subheader("Statistics")
 
+    if statistics is None:
+
+        statistics = {
+
+            "retrieved": 0,
+            "filtered": 0,
+            "downloaded": 0,
+            "time": 0
+
+        }
+
     col1, col2, col3, col4 = st.columns(4)
 
     with col1:
+
         st.metric(
-            label="Retrieved",
-            value=0
+            "Retrieved",
+            statistics["retrieved"]
         )
 
     with col2:
+
         st.metric(
-            label="Filtered",
-            value=0
+            "Filtered",
+            statistics["filtered"]
         )
 
     with col3:
+
         st.metric(
-            label="Downloaded",
-            value=0
+            "Downloaded",
+            statistics["downloaded"]
         )
 
     with col4:
+
         st.metric(
-            label="Time",
-            value="0 s"
+            "Time",
+            f"{statistics['time']} s"
         )

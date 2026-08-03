@@ -1,0 +1,41 @@
+# Domain quality configuration
+
+high_quality_domains:
+
+  # Automotive
+  - vw.com
+  - volkswagen.com
+  - bmw.com
+  - mercedes-benz.com
+  - bosch.com
+  - continental.com
+  - aptiv.com
+  - valeo.com
+
+  # AI / Cloud
+  - microsoft.com
+  - azure.microsoft.com
+  - openai.com
+  - nvidia.com
+  - google.com
+
+  # Research
+  - ieee.org
+  - arxiv.org
+  - github.com
+
+
+medium_quality_domains:
+
+  - medium.com
+  - towardsdatascience.com
+  - hackernoon.com
+  - linkedin.com
+
+
+blocked_domains:
+
+  - pinterest.com
+  - facebook.com
+  - instagram.com
+  - youtube.com

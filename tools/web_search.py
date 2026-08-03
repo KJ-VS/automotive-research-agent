@@ -1,53 +1,142 @@
+"""
+Enterprise Web Search
+
+Acts as the orchestrator of the search pipeline.
+
+Responsibilities
+----------------
+1. Build search query
+2. Execute DDGS search
+3. Parse raw search results
+4. Filter low-quality domains
+5. Rank search results
+
+Version
+-------
+M3.2 Final
+"""
+
 from ddgs import DDGS
 
-
-BLOCKED_DOMAINS = {
-    "wikipedia.org",
-    "linkedin.com",
-    "facebook.com",
-    "instagram.com",
-    "twitter.com",
-    "x.com",
-    "tiktok.com"
-}
+from tools.query_builder import QueryBuilder
+from tools.result_parser import ResultParser
+from tools.domain_filter import DomainFilter
+from tools.ranking import Ranking
 
 
-MAX_SEARCH_RESULTS = 15
-
-
-def web_search(topic):
+class WebSearch:
     """
-    Search the web and return candidate URLs.
-
-    Returns up to MAX_SEARCH_RESULTS filtered URLs.
+    Enterprise Search Orchestrator.
     """
 
-    urls = []
+    def __init__(self):
 
-    with DDGS() as ddgs:
+        self.engine = DDGS()
 
-        results = ddgs.text(
-            topic,
-            max_results=30
+        self.query_builder = QueryBuilder()
+
+        self.result_parser = ResultParser()
+
+        self.domain_filter = DomainFilter()
+
+        self.ranking = Ranking()
+
+    # ======================================================
+    # Public API
+    # ======================================================
+
+    def search(
+        self,
+        query: str,
+        max_results: int = 10
+    ) -> list:
+
+        if not query.strip():
+
+            return []
+
+        # --------------------------------------------------
+        # Step 1
+        # Build Query
+        # --------------------------------------------------
+
+        search_query = self.query_builder.build(query)
+
+        try:
+
+            raw_results = list(
+
+                self.engine.text(
+
+                    search_query,
+
+                    max_results=max_results
+
+                )
+
+            )
+
+        except Exception as e:
+
+            print(f"Search error: {e}")
+
+            return []
+
+        # --------------------------------------------------
+        # Step 2
+        # Parse Results
+        # --------------------------------------------------
+
+        results = self.result_parser.parse(
+
+            raw_results
+
         )
 
-        for result in results:
+        # --------------------------------------------------
+        # Step 3
+        # Domain Filter
+        # --------------------------------------------------
 
-            url = result.get("href")
+        filtered = []
 
-            if not url:
+        visited = set()
+
+        for item in results:
+
+            url = item["url"]
+
+            if url in visited:
+
                 continue
 
-            if any(domain in url for domain in BLOCKED_DOMAINS):
+            visited.add(url)
 
-                print(f"Skip: {url}")
+            if not self.domain_filter.is_allowed(url):
+
                 continue
 
-            print(f"Keep: {url}")
+            item["quality_score"] = (
 
-            urls.append(url)
+                self.domain_filter.quality_score(
 
-            if len(urls) >= MAX_SEARCH_RESULTS:
-                break
+                    url
 
-    return urls
+                )
+
+            )
+
+            filtered.append(item)
+
+        # --------------------------------------------------
+        # Step 4
+        # Ranking
+        # --------------------------------------------------
+
+        ranked = self.ranking.sort(
+
+            filtered
+
+        )
+
+        return ranked

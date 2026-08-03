@@ -1,20 +1,23 @@
 import streamlit as st
 
 
-def show_status():
+def show_status(result: dict | None):
     """
-    Display current pipeline status.
-
-    Returns
-    -------
-    streamlit.delta_generator.DeltaGenerator
-        Placeholder for updating status dynamically.
+    Display workflow status.
     """
 
     st.subheader("Status")
 
-    status_placeholder = st.empty()
+    if result is None:
 
-    status_placeholder.success("🟢 Ready")
+        st.info("🟢 Ready")
 
-    return status_placeholder
+        return
+
+    if result["success"]:
+
+        st.success(f"✅ {result['status']}")
+
+    else:
+
+        st.error(result["message"])
