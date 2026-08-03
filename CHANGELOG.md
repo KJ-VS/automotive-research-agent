@@ -4,30 +4,79 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-## [V1.1] - In Development
+# v1.2-search-engine
 
-### Added
+Release Date
 
-- Streamlit dashboard
-- New backend module
-- New UI module
-- Configuration module
-- Dashboard prototype
-
-### Changed
-
-- Refactored project structure
-- Moved `agent.py` to `backend/agent.py`
-- Updated `.gitignore`
-- Updated `requirements.txt`
+2026-08
 
 ---
 
-## [V1.0] - Released
+## Added
 
-### Added
+### Enterprise Search Engine
 
-- Rule-based CLI research engine
-- Web search
-- Content fetching
-- Markdown report generation
+- Query Builder
+- Result Parser
+- Domain Filter
+- Ranking Engine
+- Search Orchestrator
+
+### Dashboard
+
+- Integrated Workflow Execution
+- Live Search Statistics
+- Markdown Report Preview
+
+### Workflow
+
+- Enterprise Controller Layer
+- Modular Workflow
+- Search Pipeline Integration
+
+---
+
+## Improved
+
+- Search Quality
+- Query Expansion
+- Domain Evaluation
+- Result Ranking
+- Project Architecture
+- Module Separation
+- Code Readability
+
+---
+
+## Fixed
+
+- DDGS parsing issues
+- Duplicate URLs
+- Empty search results
+- Domain normalization
+- Search result ordering
+
+---
+
+# v1.1-dashboard
+
+## Added
+
+- Streamlit Dashboard
+- Sidebar Configuration
+- Status Panel
+- Statistics Panel
+- Markdown Preview
+- Export Interface
+
+---
+
+# v1.0-foundation
+
+## Added
+
+- CLI Research Pipeline
+- Web Search
+- Page Download
+- Markdown Report
+- Modular Project Structure

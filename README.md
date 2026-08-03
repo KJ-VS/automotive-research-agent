@@ -1,108 +1,102 @@
 # 🚗 Automotive Research Agent
 
-An enterprise-oriented research platform for automotive technology research.
+> Enterprise AI Research Pipeline for Automotive Technology
 
-The project started as a rule-based research pipeline and is gradually evolving into an enterprise AI research platform with Web UI, LLM, RAG, and Multi-Agent capabilities.
-
----
-
-# Current Status
-
-**Current Version**
-
-🚧 **V1.1 (In Development)**
-
-Latest completed milestone:
-
-- Project refactoring
-- Modular architecture
-- Streamlit dashboard prototype
-- Backend / UI separation
-- YAML configuration
+![Python](https://img.shields.io/badge/Python-3.12-blue)
+![Streamlit](https://img.shields.io/badge/UI-Streamlit-red)
+![Status](https://img.shields.io/badge/Version-v1.2-green)
+![Architecture](https://img.shields.io/badge/Architecture-Layered-success)
+![License](https://img.shields.io/badge/License-MIT-lightgrey)
 
 ---
 
-# Roadmap
+## Overview
 
-| Version | Status | Description |
-|----------|--------|-------------|
-| Prototype | ✅ Completed | Initial research prototype |
-| V1.0 | ✅ Released | Rule-based CLI research engine |
-| V1.1 | 🚧 In Development | Web dashboard & modular architecture |
-| V2.0 | ⏳ Planned | LLM-powered research assistant |
-| V3.0 | ⏳ Planned | Enterprise RAG platform |
-| V4.0 | ⏳ Planned | Multi-Agent AI research platform |
+Automotive Research Agent is an enterprise-style research assistant designed for automotive technology investigations.
 
----
+It demonstrates how a modern research pipeline can be built using a modular architecture before introducing LLMs and AI Agents.
 
-# Overview
+Current implementation focuses on:
 
-Automotive Research Agent automates the process of collecting technical information from the Internet.
+- Enterprise Search Pipeline
+- Intelligent Query Expansion
+- Domain Quality Evaluation
+- Search Result Ranking
+- Markdown Report Generation
+- Streamlit Dashboard
 
-The system performs the following tasks:
-
-- Search relevant webpages
-- Filter low-quality search results
-- Download webpage content
-- Extract the main article
-- Generate structured summaries
-- Export research reports
-
-The project is designed with a modular architecture to support future AI capabilities such as:
+Future versions will gradually evolve into:
 
 - Azure OpenAI
 - RAG
-- Enterprise Knowledge Base
 - Multi-Agent Workflow
+
+---
+
+# Architecture
+
+```text
+                    +-------------------+
+                    |   Streamlit UI    |
+                    +---------+---------+
+                              |
+                              |
+                    +---------v---------+
+                    |    Controller     |
+                    +---------+---------+
+                              |
+                              |
+                    +---------v---------+
+                    |     Workflow      |
+                    +---------+---------+
+                              |
+                    +---------v---------+
+                    |    Web Search     |
+                    +---------+---------+
+                              |
+      +-----------+-----------+------------+-----------+
+      |           |                        |           |
+      |           |                        |           |
++-----v----+ +----v-----+          +-------v------+ +--v------+
+| Query    | | Result   |          | Domain       | | Ranking |
+| Builder  | | Parser   |          | Filter       | | Engine  |
++----------+ +----------+          +--------------+ +---------+
+                              |
+                              |
+                         DuckDuckGo Search
+```
 
 ---
 
 # Features
 
-## V1.0
+## Search Engine
 
-- Rule-based web search
-- Candidate URL filtering
-- Intelligent webpage collection
-- Trafilatura content extraction
-- BeautifulSoup fallback
-- Extractive summarization
-- Markdown report generation
-
-## V1.1
-
-- Streamlit dashboard
-- Modular backend architecture
-- Configuration management
-- Web UI prototype
+- DuckDuckGo Search
+- Query Expansion
+- Intelligent Ranking
+- Domain Filtering
+- Duplicate Removal
 
 ---
 
-# System Architecture
+## Dashboard
 
-```
-                  Browser / CLI
-                       │
-                       ▼
-         Automotive Research Dashboard
-                       │
-                       ▼
-                  Controller
-                       │
-                       ▼
-                    Workflow
-                       │
-                       ▼
-                Research Agent
-                       │
-        ┌──────────────┼──────────────┐
-        ▼              ▼              ▼
-     Search         Fetch         Summary
-        │              │              │
-        └──────────────┼──────────────┘
-                       ▼
-                  Markdown Report
-```
+- Streamlit UI
+- Enterprise Layout
+- Live Statistics
+- Markdown Preview
+- Export Ready
+
+---
+
+## Architecture
+
+- Layered Architecture
+- Controller Pattern
+- Workflow Pattern
+- Tool-based Design
+- Easy Extension
 
 ---
 
@@ -111,27 +105,12 @@ The project is designed with a modular architecture to support future AI capabil
 ```text
 automotive-research-agent/
 
+│
+├── app.py
+│
 ├── backend/
-│   ├── agent.py
 │   ├── controller.py
-│   ├── workflow.py
-│   └── config.py
-│
-├── config/
-│   ├── config.yaml
-│   └── domains.yaml
-│
-├── docs/
-│   ├── architecture.md
-│   └── architecture.svg
-│
-├── logs/
-│
-├── research/
-│
-├── tests/
-│
-├── tools/
+│   └── workflow.py
 │
 ├── ui/
 │   ├── dashboard.py
@@ -140,178 +119,189 @@ automotive-research-agent/
 │   ├── statistics.py
 │   └── report.py
 │
-├── app.py
-├── main.py
-├── README.md
-├── CHANGELOG.md
-├── requirements.txt
-└── .gitignore
+├── tools/
+│   ├── web_search.py
+│   ├── query_builder.py
+│   ├── result_parser.py
+│   ├── domain_filter.py
+│   ├── ranking.py
+│   ├── fetch_page.py
+│   └── export_report.py
+│
+├── config/
+│   └── domains.yaml
+│
+├── docs/
+│
+├── research/
+│
+└── tests/
 ```
 
 ---
 
-# Components
+# Search Pipeline
 
-## backend
+```text
+User Query
 
-Responsible for coordinating the complete research workflow.
+      │
 
-- Agent
-- Controller
-- Workflow
-- Configuration
+      ▼
 
----
+Query Builder
 
-## tools
+      │
 
-Provides reusable tools including:
+      ▼
 
-- Web search
-- Content extraction
-- Summarization
-- Report generation
+DuckDuckGo Search
 
----
+      │
 
-## ui
+      ▼
 
-Responsible for the Streamlit dashboard.
+Result Parser
 
-- Dashboard
-- Sidebar
-- Progress
-- Statistics
-- Report Preview
+      │
 
----
+      ▼
 
-## config
+Domain Filter
 
-Stores project configuration.
+      │
 
-- Search settings
-- Domain filtering
-- Future LLM configuration
+      ▼
 
----
+Ranking Engine
 
-# Installation
+      │
 
-Clone the repository
+      ▼
 
-```bash
-git clone https://github.com/<your-account>/automotive-research-agent.git
+Workflow
 
-cd automotive-research-agent
-```
+      │
 
-Create virtual environment
+      ▼
 
-```bash
-python -m venv .venv
-```
-
-Activate virtual environment
-
-Windows
-
-```bash
-.venv\Scripts\activate
-```
-
-Linux / macOS
-
-```bash
-source .venv/bin/activate
-```
-
-Install dependencies
-
-```bash
-pip install -r requirements.txt
+Markdown Report
 ```
 
 ---
 
-# Quick Start
+# Roadmap
 
-## CLI Version
+## Completed
 
-```bash
-python main.py
+- ✅ M1 Dashboard Foundation
+- ✅ M2 Workflow Integration
+- ✅ M3.1 Real DuckDuckGo Search
+- ✅ M3.2 Enterprise Search Engine
+
+---
+
+## In Progress
+
+- ⏳ M3.3 Content Extraction
+- ⏳ M3.4 Extractive Summarization
+
+---
+
+## Future
+
+- Azure OpenAI
+- Azure AI Search
+- Retrieval-Augmented Generation (RAG)
+- Multi-Agent Workflow
+- Enterprise Knowledge Base
+
+---
+
+# Technologies
+
+- Python
+- Streamlit
+- DuckDuckGo Search
+- YAML
+- Markdown
+- Enterprise Layered Architecture
+
+---
+
+# Example
+
+Input
+
+```
+ADAS AI
 ```
 
-## Web Dashboard
+↓
 
-```bash
-streamlit run app.py
+Pipeline
+
+```
+Query Builder
+
+↓
+
+Search
+
+↓
+
+Ranking
+
+↓
+
+Markdown Report
 ```
 
----
+↓
 
-# Dependencies
+Output
 
-Core libraries
-
-- requests
-- beautifulsoup4
-- trafilatura
-- ddgs
-- streamlit
+- Ranked search results
+- Quality score
+- Markdown report
 
 ---
 
-# Current Development
+# Screenshots
 
-V1.1 currently focuses on building the software architecture rather than AI capabilities.
+## Dashboard
 
-Current milestones include:
-
-- Repository refactoring
-- Streamlit dashboard
-- UI modularization
-- Controller integration
-- Workflow orchestration
+*(Add your latest Streamlit screenshot here.)*
 
 ---
 
-# Future Versions
+## Search Results
 
-## V2
-
-- Azure OpenAI integration
-- AI-generated summaries
-- Interactive report generation
+*(Add your latest search result screenshot here.)*
 
 ---
 
-## V3
+## Markdown Report
 
-- RAG
-- Vector database
-- Enterprise knowledge retrieval
-- Multi-source search
+*(Add your report preview screenshot here.)*
 
 ---
 
-## V4
+# Version
 
-- Multi-Agent orchestration
-- Planner Agent
-- Search Agent
-- Summary Agent
-- Report Agent
-- Enterprise AI Platform
+Current Version
+
+**v1.2 Enterprise Search Engine**
 
 ---
 
-# Changelog
+# Next Milestone
 
-See **CHANGELOG.md** for detailed version history.
+**M3.3**
 
----
+Content Extraction
 
-# License
-
-This project is intended for educational and learning purposes.
+- Trafilatura
+- BeautifulSoup
+- Boilerplate Removal
+- Main Content Extraction
