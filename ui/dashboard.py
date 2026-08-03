@@ -37,7 +37,7 @@ def show_dashboard():
 
     with version_col:
         st.markdown("###")
-        st.info("🚧 V1.1")
+        st.info("🚀 V1.2")
 
     st.divider()
 
@@ -115,5 +115,5 @@ def show_dashboard():
     # ======================================================
 
     st.caption(
-        "© 2026 Automotive Research Agent | Version 1.1"
+        "© 2026 Automotive Research Agent | Version 1.2"
     )

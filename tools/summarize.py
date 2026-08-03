@@ -1,82 +1,151 @@
+"""
+Enterprise Summarization Engine
+
+M3.3
+
+Generates extractive summaries for
+downloaded web pages.
+
+Future
+------
+V2.0
+    Azure OpenAI
+
+V3.0
+    RAG
+
+V4.0
+    Multi-Agent
+"""
+
 import re
 
 
-def summarize(pages):
+DEFAULT_MAX_SENTENCES = 5
+DEFAULT_FALLBACK_LENGTH = 500
+
+
+class Summarizer:
     """
-    Create a simple extractive summary for each page.
-
-    Input:
-        [
-            {
-                "title": "...",
-                "url": "...",
-                "content": "..."
-            }
-        ]
-
-    Output:
-        [
-            {
-                "title": "...",
-                "url": "...",
-                "summary": "..."
-                "source": "web"
-            }
-        ]
+    Enterprise Extractive Summarizer.
     """
 
-    summaries = []
+    def __init__(self):
 
-    for page in pages:
+        pass
 
-        title = page["title"]
-        url = page["url"]
-        content = page["content"]
+    # =====================================================
+    # Public API
+    # =====================================================
 
-        summary = extract_summary(content)
+    def generate(
+        self,
+        pages: list
+    ) -> list:
+        """
+        Generate summaries for all pages.
 
-        summaries.append({
-            "title": title,
-            "url": url,
-            "summary": summary
-        })
+        Parameters
+        ----------
+        pages
+            List of extracted pages.
 
-    return summaries
+        Returns
+        -------
+        list
+            Pages with an additional 'summary' field.
+        """
 
+        summarized_pages = []
 
-def extract_summary(text, max_sentences=5):
-    """
-    Extract the first few meaningful sentences.
-    """
+        for page in pages:
 
-    # Replace line breaks with spaces
-    text = text.replace("\n", " ")
+            summary = self.extract_summary(
 
-    # Remove extra spaces
-    text = re.sub(r"\s+", " ", text)
+                page.get(
 
-    # Split into sentences
-    sentences = re.split(r'(?<=[.!?])\s+', text)
+                    "content",
 
-    summary = []
+                    ""
 
-    for sentence in sentences:
+                )
 
-        sentence = sentence.strip()
+            )
 
-        if len(sentence) < 40:
-            continue
+            summarized_page = page.copy()
 
-        summary.append(sentence)
+            summarized_page["summary"] = summary
 
-        if len(summary) >= max_sentences:
-            break
+            summarized_pages.append(
 
-    if not summary:
+                summarized_page
 
-        # Fallback:
-        # If no complete sentence is found,
-        # return the first 500 characters.
-        return text[:500]
+            )
 
-    return "\n\n".join(summary)
+        return summarized_pages
+
+    # =====================================================
+    # Extractive Summary
+    # =====================================================
+
+    def extract_summary(
+        self,
+        text: str,
+        max_sentences: int = DEFAULT_MAX_SENTENCES
+    ) -> str:
+
+        if not text:
+
+            return ""
+
+        text = text.replace(
+
+            "\n",
+
+            " "
+
+        )
+
+        text = re.sub(
+
+            r"\s+",
+
+            " ",
+
+            text
+
+        )
+
+        sentences = re.split(
+
+            r"(?<=[.!?])\s+",
+
+            text
+
+        )
+
+        summary = []
+
+        for sentence in sentences:
+
+            sentence = sentence.strip()
+
+            if len(sentence) < 40:
+
+                continue
+
+            summary.append(
+
+                sentence
+
+            )
+
+            if len(summary) >= max_sentences:
+
+                break
+
+        if not summary:
+
+            return text[:DEFAULT_FALLBACK_LENGTH]
+
+        return "\n\n".join(summary)

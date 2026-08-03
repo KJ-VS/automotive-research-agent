@@ -5,29 +5,25 @@ Coordinates the complete research pipeline.
 
 Version
 -------
-M3.2 Final
+M3.3 Final
 
-Future
-------
-M3.3
-    Content Extraction
-
-M3.4
-    Extractive Summary
-
-V2.0
-    Azure OpenAI
-
-V3.0
-    RAG
-
-V4.0
-    Multi-Agent
+Pipeline
+--------
+Search
+    ↓
+Content Extraction
+    ↓
+Summarization
+    ↓
+Report Export
 """
 
 import time
 
 from tools.web_search import WebSearch
+from tools.fetch_page import FetchPage
+from tools.summarize import Summarizer
+from tools.export_report import ReportExporter
 
 
 class Workflow:
@@ -39,6 +35,12 @@ class Workflow:
 
         self.search_engine = WebSearch()
 
+        self.fetch_engine = FetchPage()
+
+        self.summary_engine = Summarizer()
+
+        self.report_exporter = ReportExporter()
+
     # =====================================================
     # Public API
     # =====================================================
@@ -48,46 +50,60 @@ class Workflow:
         query: str,
         settings: dict
     ) -> dict:
-        """
-        Execute one complete research workflow.
-        """
 
         start_time = time.time()
 
+        max_results = settings.get(
+            "max_results",
+            10
+        )
+
         # -------------------------------------------------
+        # Step 1
         # Search
         # -------------------------------------------------
 
-        search_results = self._search(
-            query,
-            settings
+        search_results = self.search_engine.search(
+            query=query,
+            max_results=max_results
         )
 
         # -------------------------------------------------
-        # Fetch
-        # (Mock in M3.2)
+        # Step 2
+        # Fetch Content
         # -------------------------------------------------
 
-        fetched_pages = self._fetch(
-            search_results
+        pages = self.fetch_engine.fetch(
+            search_results=search_results,
+            max_pages=max_results
         )
 
         # -------------------------------------------------
-        # Summary
-        # (Mock in M3.2)
+        # Step 3
+        # Summarize
         # -------------------------------------------------
 
-        report = self._summarize(
-            query,
-            fetched_pages
+        pages = self.summary_engine.generate(
+            pages
         )
+
+        # -------------------------------------------------
+        # Step 4
+        # Export Report
+        # -------------------------------------------------
+
+        report = self.report_exporter.export(
+            query=query,
+            pages=pages
+        )
+
+        # -------------------------------------------------
+        # Statistics
+        # -------------------------------------------------
 
         elapsed = round(
-
             time.time() - start_time,
-
             2
-
         )
 
         return {
@@ -104,7 +120,7 @@ class Workflow:
 
                 "filtered": len(search_results),
 
-                "downloaded": len(fetched_pages),
+                "downloaded": len(pages),
 
                 "time": elapsed
 
@@ -113,144 +129,3 @@ class Workflow:
             "report": report
 
         }
-
-    # =====================================================
-    # Search
-    # =====================================================
-
-    def _search(
-        self,
-        query: str,
-        settings: dict
-    ) -> list:
-
-        max_results = settings.get(
-
-            "max_results",
-
-            10
-
-        )
-
-        return self.search_engine.search(
-
-            query=query,
-
-            max_results=max_results
-
-        )
-
-    # =====================================================
-    # Fetch
-    # =====================================================
-
-    def _fetch(
-        self,
-        search_results: list
-    ) -> list:
-        """
-        Placeholder.
-
-        M3.3 will replace this step with:
-
-        tools/fetch_page.py
-        """
-
-        time.sleep(0.3)
-
-        return search_results
-
-    # =====================================================
-    # Summary
-    # =====================================================
-
-    def _summarize(
-        self,
-        query: str,
-        search_results: list
-    ) -> str:
-        """
-        Placeholder.
-
-        M3.4 will replace this step with:
-
-        summarize.py
-        """
-
-        time.sleep(0.3)
-
-        report = []
-
-        report.append("# Research Report\n")
-
-        report.append(f"## Topic\n\n{query}\n")
-
-        report.append(
-
-            f"Retrieved **{len(search_results)}** search results.\n"
-
-        )
-
-        report.append("\n---\n")
-
-        report.append("## Search Results\n")
-
-        if not search_results:
-
-            report.append(
-
-                "\nNo search results found.\n"
-
-            )
-
-            return "".join(report)
-
-        for index, item in enumerate(
-
-            search_results,
-
-            start=1
-
-        ):
-
-            report.append(
-
-                f"\n### {index}. {item['title']}\n"
-
-            )
-
-            report.append(
-
-                f"\n**URL**\n\n{item['url']}\n"
-
-            )
-
-            report.append(
-
-                f"\n**Quality Score**\n\n{item['quality_score']}\n"
-
-            )
-
-            report.append(
-
-                f"\n**Final Score**\n\n{item['final_score']}\n"
-
-            )
-
-            if item.get("snippet"):
-
-                report.append(
-
-                    f"\n**Snippet**\n\n{item['snippet']}\n"
-
-                )
-
-            report.append("\n---\n")
-
-        report.append(
-
-            "\nGenerated by Automotive Research Agent\n"
-
-        )
-
-        return "".join(report)

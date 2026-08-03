@@ -1,108 +1,92 @@
 # 🚗 Automotive Research Agent
 
-> Enterprise AI Research Pipeline for Automotive Technology
+Enterprise AI Research Platform for Automotive Research
 
-![Python](https://img.shields.io/badge/Python-3.12-blue)
-![Streamlit](https://img.shields.io/badge/UI-Streamlit-red)
-![Status](https://img.shields.io/badge/Version-v1.2-green)
-![Architecture](https://img.shields.io/badge/Architecture-Layered-success)
-![License](https://img.shields.io/badge/License-MIT-lightgrey)
+An enterprise-style research assistant that automates the complete technical research workflow.
+
+The platform searches the web, ranks search results, extracts high-quality content, generates summaries, and exports professional research reports through a modular pipeline architecture.
 
 ---
 
-## Overview
+## Current Version
 
-Automotive Research Agent is an enterprise-style research assistant designed for automotive technology investigations.
-
-It demonstrates how a modern research pipeline can be built using a modular architecture before introducing LLMs and AI Agents.
-
-Current implementation focuses on:
-
-- Enterprise Search Pipeline
-- Intelligent Query Expansion
-- Domain Quality Evaluation
-- Search Result Ranking
-- Markdown Report Generation
-- Streamlit Dashboard
-
-Future versions will gradually evolve into:
-
-- Azure OpenAI
-- RAG
-- Multi-Agent Workflow
+**🚀 V1.2 – Enterprise Research Pipeline**
 
 ---
 
-# Architecture
+## Features
 
-```text
-                    +-------------------+
-                    |   Streamlit UI    |
-                    +---------+---------+
-                              |
-                              |
-                    +---------v---------+
-                    |    Controller     |
-                    +---------+---------+
-                              |
-                              |
-                    +---------v---------+
-                    |     Workflow      |
-                    +---------+---------+
-                              |
-                    +---------v---------+
-                    |    Web Search     |
-                    +---------+---------+
-                              |
-      +-----------+-----------+------------+-----------+
-      |           |                        |           |
-      |           |                        |           |
-+-----v----+ +----v-----+          +-------v------+ +--v------+
-| Query    | | Result   |          | Domain       | | Ranking |
-| Builder  | | Parser   |          | Filter       | | Engine  |
-+----------+ +----------+          +--------------+ +---------+
-                              |
-                              |
-                         DuckDuckGo Search
-```
+### Dashboard
 
----
+- Streamlit Enterprise Dashboard
+- Configurable Research Settings
+- Real-time Research Statistics
+- Markdown Report Preview
 
-# Features
-
-## Search Engine
+### Search Engine
 
 - DuckDuckGo Search
-- Query Expansion
-- Intelligent Ranking
-- Domain Filtering
-- Duplicate Removal
+- Enterprise Query Builder
+- Domain Quality Filtering
+- Search Result Ranking
+- Keyword-based Relevance Scoring
+
+### Content Extraction
+
+- HTTP Page Downloader
+- Trafilatura Content Extraction
+- BeautifulSoup Fallback Parser
+- Local Cache Management
+
+### Summarization
+
+- Extractive Summarization
+- Multi-page Summary Generation
+- Enterprise Summarizer
+
+### Report Export
+
+- Markdown Report Export
+- Research Statistics
+- Structured Report Layout
 
 ---
 
-## Dashboard
+# System Architecture
 
-- Streamlit UI
-- Enterprise Layout
-- Live Statistics
-- Markdown Preview
-- Export Ready
-
----
-
-## Architecture
-
-- Layered Architecture
-- Controller Pattern
-- Workflow Pattern
-- Tool-based Design
-- Easy Extension
+```
+                     +----------------------+
+                     |      Dashboard       |
+                     +----------+-----------+
+                                |
+                                v
+                     +----------------------+
+                     |     Controller       |
+                     +----------+-----------+
+                                |
+                                v
+                     +----------------------+
+                     |      Workflow        |
+                     +----------+-----------+
+                                |
+        -----------------------------------------------------
+        |                   |                 |              |
+        v                   v                 v              v
++---------------+   +---------------+   +---------------+   +----------------+
+|  Web Search   |-->| Content Fetch |-->| Summarizer    |-->| Report Export  |
++---------------+   +---------------+   +---------------+   +----------------+
+        |
+        v
++----------------------+
+| Ranking & Filtering  |
++----------------------+
+```
 
 ---
 
 # Project Structure
 
-```text
+```
 automotive-research-agent/
 
 │
@@ -126,182 +110,227 @@ automotive-research-agent/
 │   ├── domain_filter.py
 │   ├── ranking.py
 │   ├── fetch_page.py
+│   ├── summarize.py
 │   └── export_report.py
 │
 ├── config/
 │   └── domains.yaml
 │
-├── docs/
-│
 ├── research/
+│   ├── cache/
+│   └── final/
 │
-└── tests/
+└── README.md
 ```
 
 ---
 
-# Search Pipeline
-
-```text
-User Query
-
-      │
-
-      ▼
-
-Query Builder
-
-      │
-
-      ▼
-
-DuckDuckGo Search
-
-      │
-
-      ▼
-
-Result Parser
-
-      │
-
-      ▼
-
-Domain Filter
-
-      │
-
-      ▼
-
-Ranking Engine
-
-      │
-
-      ▼
-
-Workflow
-
-      │
-
-      ▼
-
-Markdown Report
-```
-
----
-
-# Roadmap
-
-## Completed
-
-- ✅ M1 Dashboard Foundation
-- ✅ M2 Workflow Integration
-- ✅ M3.1 Real DuckDuckGo Search
-- ✅ M3.2 Enterprise Search Engine
-
----
-
-## In Progress
-
-- ⏳ M3.3 Content Extraction
-- ⏳ M3.4 Extractive Summarization
-
----
-
-## Future
-
-- Azure OpenAI
-- Azure AI Search
-- Retrieval-Augmented Generation (RAG)
-- Multi-Agent Workflow
-- Enterprise Knowledge Base
-
----
-
-# Technologies
-
-- Python
-- Streamlit
-- DuckDuckGo Search
-- YAML
-- Markdown
-- Enterprise Layered Architecture
-
----
-
-# Example
-
-Input
+# Workflow
 
 ```
-ADAS AI
-```
+Research Question
 
-↓
+        │
 
-Pipeline
+        ▼
 
-```
-Query Builder
+Web Search
 
-↓
+        │
 
-Search
+        ▼
 
-↓
+Result Parsing
+
+        │
+
+        ▼
+
+Domain Filtering
+
+        │
+
+        ▼
 
 Ranking
 
+        │
+
+        ▼
+
+Content Extraction
+
+        │
+
+        ▼
+
+Summarization
+
+        │
+
+        ▼
+
+Markdown Report
+```
+
+---
+
+# Current Capabilities
+
+✅ Enterprise Dashboard
+
+✅ Enterprise Workflow
+
+✅ Search Result Ranking
+
+✅ Domain Quality Evaluation
+
+✅ Intelligent Content Extraction
+
+✅ Trafilatura Integration
+
+✅ BeautifulSoup Fallback
+
+✅ Local Cache Management
+
+✅ Extractive Summarization
+
+✅ Markdown Report Export
+
+---
+
+# Technology Stack
+
+| Layer | Technology |
+|--------|------------|
+| UI | Streamlit |
+| Backend | Python |
+| Search | DuckDuckGo Search (DDGS) |
+| Content Extraction | Trafilatura + BeautifulSoup |
+| HTTP | Requests |
+| Parsing | BeautifulSoup4 |
+| Configuration | YAML |
+| Report | Markdown |
+
+---
+
+# Version Roadmap
+
+## V1.0
+
+CLI Research Agent
+
+- DuckDuckGo Search
+- Markdown Report
+
+---
+
+## V1.1
+
+Research Dashboard
+
+- Streamlit Dashboard
+- Enterprise UI
+- Search Statistics
+- Search Result Ranking
+
+---
+
+## 🚀 V1.2 (Current)
+
+Enterprise Research Pipeline
+
+- Enterprise Workflow
+- Query Builder
+- Domain Filter
+- Ranking Engine
+- Content Extraction
+- Trafilatura
+- BeautifulSoup Fallback
+- Enterprise Summarizer
+- Report Exporter
+
+---
+
+## V1.3
+
+Enterprise Search Quality
+
+Planned Features
+
+- Semantic Ranking
+- Better Query Expansion
+- Freshness Evaluation
+- Duplicate Detection
+- Explainable Ranking
+- Overall Search Score
+- Enterprise Search Analytics
+
+---
+
+## V2.0
+
+Azure OpenAI Integration
+
+- LLM Summarization
+- Prompt Templates
+- AI Report Generation
+
+---
+
+## V3.0
+
+Retrieval-Augmented Generation (RAG)
+
+- Vector Database
+- Embedding Search
+- Hybrid Retrieval
+
+---
+
+## V4.0
+
+Multi-Agent Workflow
+
+- Planner Agent
+- Search Agent
+- Research Agent
+- Report Agent
+
+---
+
+# Example Output
+
+```
+Research Question
+
+↓
+
+Search Results
+
+↓
+
+Ranked Results
+
+↓
+
+Content Extraction
+
+↓
+
+Summary Generation
+
 ↓
 
 Markdown Report
 ```
 
-↓
-
-Output
-
-- Ranked search results
-- Quality score
-- Markdown report
-
 ---
 
-# Screenshots
+# Author
 
-## Dashboard
+Automotive Research Agent
 
-*(Add your latest Streamlit screenshot here.)*
+Enterprise AI Research Platform
 
----
-
-## Search Results
-
-*(Add your latest search result screenshot here.)*
-
----
-
-## Markdown Report
-
-*(Add your report preview screenshot here.)*
-
----
-
-# Version
-
-Current Version
-
-**v1.2 Enterprise Search Engine**
-
----
-
-# Next Milestone
-
-**M3.3**
-
-Content Extraction
-
-- Trafilatura
-- BeautifulSoup
-- Boilerplate Removal
-- Main Content Extraction
+Version 1.2
