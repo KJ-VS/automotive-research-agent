@@ -1,17 +1,22 @@
 """
 Enterprise Content Extraction
 
-M3.3
+Version
+-------
+V1.3
 
-Downloads web pages and extracts the
-main article content.
+Downloads web pages and extracts
+high-quality article content.
 
 Pipeline
 
 Search Result
         │
         ▼
-Download HTML
+HTTP Download
+        │
+        ▼
+Encoding Detection
         │
         ▼
 Trafilatura
@@ -87,24 +92,6 @@ class FetchPage:
 
         """
         Download and extract page contents.
-
-        Parameters
-        ----------
-        search_results
-
-            Search results returned by WebSearch.
-
-        max_pages
-
-            Maximum pages to download.
-
-        max_content_length
-
-            Maximum stored content length.
-
-        Returns
-        -------
-        list
         """
 
         pages = []
@@ -121,75 +108,117 @@ class FetchPage:
 
             try:
 
-                response = requests.get(
+                response = None
 
-                    url,
+                for attempt in range(3):
 
-                    headers=self.headers,
+                    try:
 
-                    timeout=10,
+                        response = requests.get(
 
-                    allow_redirects=True
+                            url,
 
-                )
+                            headers=self.headers,
 
-                response.raise_for_status()
+                            timeout=10,
+
+                            allow_redirects=True
+
+                        )
+
+                        response.raise_for_status()
+
+                        break
+
+                    except Exception:
+
+                        if attempt == 2:
+
+                            raise
+
+                # ==========================================
+                # Encoding Detection
+                # ==========================================
+
+                response.encoding = response.apparent_encoding
 
                 html = response.text
 
+                # ==========================================
+                # Extract Title
+                # ==========================================
+
                 title = self.extract_title(html)
 
-                content = self.extract_with_trafilatura(html)
+                # ==========================================
+                # Trafilatura
+                # ==========================================
+
+                content = self.extract_with_trafilatura(
+
+                    html
+
+                )
 
                 if content:
 
-                    print("Trafilatura extraction successful.")
+                    print(
+
+                        "Trafilatura extraction successful."
+
+                    )
 
                 else:
 
                     print(
+
                         "Trafilatura failed. Using BeautifulSoup..."
+
                     )
 
-                    content = self.extract_with_bs4(html)
+                    content = self.extract_with_bs4(
 
-                content = self.clean_text(content)
+                        html
+
+                    )
+
+                # ==========================================
+                # Clean Content
+                # ==========================================
+
+                content = self.clean_text(
+
+                    content
+
+                )
 
                 if len(content) < 100:
 
-                    print("Ignored (content too short).")
+                    print(
+
+                        "Ignored (content too short)."
+
+                    )
 
                     continue
 
                 content = content[:max_content_length]
 
-                page = {
+                # ==========================================
+                # Preserve Search Metadata
+                # ==========================================
 
-                    "title": title,
+                page = result.copy()
 
-                    "url": url,
+                page["title"] = title
 
-                    "content": content,
+                page["content"] = content
 
-                    "quality_score": result.get(
+                pages.append(
 
-                        "quality_score",
+                    page
 
-                        0
-
-                    ),
-
-                    "final_score": result.get(
-
-                        "final_score",
-
-                        0
-
-                    )
-
-                }
-
-                pages.append(page)
+                )
 
                 self.save_cache(
 
@@ -203,7 +232,11 @@ class FetchPage:
 
             except Exception as e:
 
-                print(f"Failed: {url}")
+                print(
+
+                    f"Failed: {url}"
+
+                )
 
                 print(e)
 
@@ -217,7 +250,7 @@ class FetchPage:
 
         return pages
 
-        # =====================================================
+    # =====================================================
     # Helper Functions
     # =====================================================
 

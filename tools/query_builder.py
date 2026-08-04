@@ -1,86 +1,158 @@
 """
 Enterprise Query Builder
 
-Builds optimized search queries for
-the Automotive Research Agent.
-
 Version
 -------
-M3.2 Final
-"""
+V1.3.1
 
+Builds optimized search queries by
+expanding domain-specific keywords.
+"""
 
 from typing import Dict, List
 
 
+MAX_EXPANSION_TERMS = 15
+
+
 class QueryBuilder:
     """
-    Query enhancement module.
-
-    Converts a short user query into a richer
-    search query while keeping it concise.
+    Enterprise Query Builder.
     """
 
     def __init__(self):
 
         self.keyword_map: Dict[str, List[str]] = {
 
-            "adas": [
-                "automotive",
-                "autonomous driving"
-            ],
+            # =====================================================
+            # Automotive
+            # =====================================================
 
-            "automotive": [
-                "vehicle",
-                "software defined vehicle"
+            "adas": [
+
+                "advanced driver assistance systems",
+
+                "autonomous driving",
+
+                "automotive"
+
             ],
 
             "sdv": [
-                "software defined vehicle"
+
+                "software defined vehicle",
+
+                "vehicle software platform",
+
+                "automotive"
+
             ],
 
+            "ecu": [
+
+                "electronic control unit",
+
+                "automotive"
+
+            ],
+
+            "autosar": [
+
+                "adaptive autosar",
+
+                "classic autosar"
+
+            ],
+
+            "iso26262": [
+
+                "functional safety"
+
+            ],
+
+            # =====================================================
+            # AI
+            # =====================================================
+
             "ai": [
-                "artificial intelligence"
+
+                "artificial intelligence",
+
+                "generative ai"
+
+            ],
+
+            "genai": [
+
+                "generative ai",
+
+                "large language model"
+
             ],
 
             "llm": [
-                "large language model"
+
+                "large language model",
+
+                "foundation model"
+
             ],
 
             "rag": [
-                "retrieval augmented generation"
+
+                "retrieval augmented generation",
+
+                "vector database"
+
             ],
 
             "agent": [
+
+                "ai agent",
+
                 "multi agent"
+
             ],
+
+            # =====================================================
+            # Cloud
+            # =====================================================
 
             "azure": [
-                "microsoft",
-                "azure openai"
-            ],
 
-            "python": [
-                "programming"
+                "microsoft azure",
+
+                "azure openai",
+
+                "azure ai"
+
             ],
 
             "kubernetes": [
+
                 "k8s",
+
                 "aks"
+
+            ],
+
+            "docker": [
+
+                "container",
+
+                "docker container"
+
             ]
         }
 
-    # ==========================================================
+    # =====================================================
     # Public API
-    # ==========================================================
+    # =====================================================
 
     def build(
         self,
         query: str
     ) -> str:
-        """
-        Build an enhanced search query.
-        """
 
         if not query:
 
@@ -90,15 +162,13 @@ class QueryBuilder:
 
         tokens = self._tokenize(query)
 
-        expanded = self._expand(tokens)
+        expansions = self._expand(tokens)
 
-        merged = self._merge(query, expanded)
+        return self._merge(query, expansions)
 
-        return merged
-
-    # ==========================================================
+    # =====================================================
     # Tokenize
-    # ==========================================================
+    # =====================================================
 
     def _tokenize(
         self,
@@ -113,37 +183,37 @@ class QueryBuilder:
 
         ]
 
-    # ==========================================================
-    # Expand Keywords
-    # ==========================================================
+    # =====================================================
+    # Expand
+    # =====================================================
 
     def _expand(
         self,
         tokens: List[str]
     ) -> List[str]:
 
-        keywords = []
+        expanded = []
 
         for token in tokens:
 
             if token in self.keyword_map:
 
-                keywords.extend(
+                expanded.extend(
 
                     self.keyword_map[token]
 
                 )
 
-        return keywords
+        return expanded
 
-    # ==========================================================
-    # Merge Query
-    # ==========================================================
+    # =====================================================
+    # Merge
+    # =====================================================
 
     def _merge(
         self,
         original: str,
-        keywords: List[str]
+        expanded: List[str]
     ) -> str:
 
         result = [original]
@@ -154,7 +224,9 @@ class QueryBuilder:
 
         }
 
-        for keyword in keywords:
+        count = 0
+
+        for keyword in expanded:
 
             key = keyword.lower()
 
@@ -165,5 +237,11 @@ class QueryBuilder:
             visited.add(key)
 
             result.append(keyword)
+
+            count += 1
+
+            if count >= MAX_EXPANSION_TERMS:
+
+                break
 
         return " ".join(result)

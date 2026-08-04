@@ -120,6 +120,10 @@ class ReportExporter:
 
             return "".join(lines)
 
+        # =================================================
+        # Ranked Results
+        # =================================================
+
         for index, page in enumerate(
 
             pages,
@@ -128,9 +132,17 @@ class ReportExporter:
 
         ):
 
+            rank = page.get(
+
+                "rank",
+
+                index
+
+            )
+
             lines.append(
 
-                f"\n## {index}. {page['title']}\n"
+                f"\n## #{rank} {page['title']}\n"
 
             )
 
@@ -144,6 +156,14 @@ class ReportExporter:
 
             lines.append(
 
+                f"\n**Overall Score**\n\n"
+
+                f"{page.get('overall_score',0)}\n"
+
+            )
+
+            lines.append(
+
                 f"\n**Quality Score**\n\n"
 
                 f"{page.get('quality_score',0)}\n"
@@ -152,9 +172,41 @@ class ReportExporter:
 
             lines.append(
 
-                f"\n**Final Score**\n\n"
+                f"\n**Domain Score**\n\n"
 
-                f"{page.get('final_score',0)}\n"
+                f"{page.get('domain_score',0)}\n"
+
+            )
+
+            lines.append(
+
+                f"\n**Title Score**\n\n"
+
+                f"{page.get('title_score',0)}\n"
+
+            )
+
+            lines.append(
+
+                f"\n**Snippet Score**\n\n"
+
+                f"{page.get('snippet_score',0)}\n"
+
+            )
+
+            lines.append(
+
+                f"\n**Content Score**\n\n"
+
+                f"{page.get('content_score',0)}\n"
+
+            )
+
+            lines.append(
+
+                f"\n**Penalty**\n\n"
+
+                f"{page.get('penalty',0)}\n"
 
             )
 
@@ -177,6 +229,34 @@ class ReportExporter:
             )
 
             lines.append("\n\n---\n")
+
+        # =================================================
+        # Ranking Overview
+        # =================================================
+
+        lines.append(
+
+            "\n# Ranked Search Results\n"
+
+        )
+
+        for page in pages:
+
+            lines.append(
+
+                f"- #{page.get('rank','-')} "
+
+                f"{page['title']} "
+
+                f"(Overall Score: {page.get('overall_score',0)})\n"
+
+            )
+
+        lines.append(
+
+            "\n---\n"
+
+        )
 
         lines.append(
 

@@ -1,3 +1,13 @@
+"""
+Dashboard UI
+
+Enterprise AI Research Dashboard
+
+Version
+-------
+V1.3
+"""
+
 import streamlit as st
 
 from backend.controller import Controller
@@ -32,12 +42,18 @@ def show_dashboard():
     title_col, version_col = st.columns([8, 2])
 
     with title_col:
+
         st.title("🚗 Automotive Research Dashboard")
-        st.caption("Enterprise AI Research Platform")
+
+        st.caption(
+            "Enterprise AI Research Platform"
+        )
 
     with version_col:
+
         st.markdown("###")
-        st.info("🚀 V1.2")
+
+        st.info("🚀 V1.3")
 
     st.divider()
 
@@ -48,9 +64,13 @@ def show_dashboard():
     st.subheader("Research Question")
 
     research_question = st.text_area(
+
         label="",
+
         placeholder="What would you like to research today?",
+
         height=140
+
     )
 
     # ======================================================
@@ -60,31 +80,36 @@ def show_dashboard():
     result = None
 
     if st.button(
+
         "🚀 Start Research",
+
         use_container_width=True,
+
         type="primary"
+
     ):
 
-        with st.spinner("Running research workflow..."):
+        if not research_question.strip():
 
-            result = controller.start_research(
-                query=research_question,
-                settings=settings
+            st.warning(
+                "Please enter a research question."
             )
 
-    # ======================================================
-    # Prepare UI Data
-    # ======================================================
+        else:
 
-    if result is None:
+            with st.spinner(
 
-        statistics = None
-        report = None
+                "Running enterprise research workflow..."
 
-    else:
+            ):
 
-        statistics = result["statistics"]
-        report = result["report"]
+                result = controller.start_research(
+
+                    query=research_question,
+
+                    settings=settings
+
+                )
 
     # ======================================================
     # Status
@@ -98,15 +123,15 @@ def show_dashboard():
     # Statistics
     # ======================================================
 
-    show_statistics(statistics)
+    show_statistics(result)
 
     st.divider()
 
     # ======================================================
-    # Report Preview
+    # Report
     # ======================================================
 
-    show_report(report)
+    show_report(result)
 
     st.divider()
 
@@ -115,5 +140,7 @@ def show_dashboard():
     # ======================================================
 
     st.caption(
-        "© 2026 Automotive Research Agent | Version 1.2"
+
+        "© 2026 Automotive Research Agent | Enterprise AI Platform | Version 1.3"
+
     )

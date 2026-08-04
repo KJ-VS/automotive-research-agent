@@ -1,43 +1,36 @@
 """
-Enterprise Domain Filter
-
-Evaluates search result domains and
-filters low-quality websites.
+Enterprise Domain Authority Engine
 
 Version
 -------
-M3.2 Final
+V1.3.2
+
+Evaluates website authority and determines
+whether a search result should participate
+in ranking.
 """
 
-from pathlib import Path
-from urllib.parse import urlparse
-from typing import Dict, List
-
+import os
 import yaml
+from urllib.parse import urlparse
 
 
 class DomainFilter:
-    """
-    Domain quality evaluation.
-
-    Responsibilities
-    ----------------
-    - Normalize domains
-    - Block unwanted domains
-    - Evaluate domain quality
-    """
 
     def __init__(self):
 
         self.config = self._load_config()
 
-    # ======================================================
-    # Configuration
-    # ======================================================
+    # ==========================================================
+    # Load Configuration
+    # ==========================================================
 
-    def _load_config(self) -> Dict:
+    def _load_config(self):
 
-        config_path = Path("config/domains.yaml")
+        config_path = os.path.join(
+            "config",
+            "domains.yaml"
+        )
 
         default = {
 
@@ -49,23 +42,19 @@ class DomainFilter:
 
         }
 
-        if not config_path.exists():
+        if not os.path.exists(config_path):
 
             return default
 
         try:
 
             with open(
-
                 config_path,
-
                 "r",
-
                 encoding="utf-8"
+            ) as f:
 
-            ) as file:
-
-                data = yaml.safe_load(file)
+                data = yaml.safe_load(f)
 
                 if data is None:
 
@@ -75,151 +64,300 @@ class DomainFilter:
 
         except Exception as e:
 
-            print(f"Failed to load domains.yaml: {e}")
+            print(f"Domain config error: {e}")
 
             return default
 
-    # ======================================================
+    # ==========================================================
     # Public API
-    # ======================================================
+    # ==========================================================
 
-    def is_allowed(
-        self,
-        url: str
-    ) -> bool:
+    def is_allowed(self, url: str) -> bool:
 
-        domain = self._normalize_domain(url)
+        domain = self._extract_domain(url)
 
-        return not self._is_blocked(domain)
+        for blocked in self.config.get(
+            "blocked_domains",
+            []
+        ):
 
-    def quality_score(
-        self,
-        url: str
-    ) -> int:
+            if blocked in domain:
 
-        domain = self._normalize_domain(url)
+                return False
 
-        level = self._domain_level(domain)
+        return True
 
-        if level == "HIGH":
+    # ==========================================================
+    # Domain Authority
+    # ==========================================================
 
-            return 10
+    def quality_score(self, url: str) -> int:
 
-        if level == "MEDIUM":
+        domain = self._extract_domain(url)
+
+        # -----------------------------
+        # Blocked
+        # -----------------------------
+
+        for item in self.config.get(
+            "blocked_domains",
+            []
+        ):
+
+            if item in domain:
+
+                return 0
+
+        # -----------------------------
+        # Enterprise / OEM
+        # -----------------------------
+
+        enterprise = [
+
+            "bosch.com",
+
+            "continental.com",
+
+            "bmw.com",
+
+            "mercedes-benz.com",
+
+            "volkswagen.com",
+
+            "vw.com",
+
+            "aptiv.com",
+
+            "valeo.com",
+
+            "nvidia.com",
+
+            "microsoft.com",
+
+            "azure.microsoft.com",
+
+            "openai.com"
+
+        ]
+
+        for item in enterprise:
+
+            if item in domain:
+
+                return 10
+
+        # -----------------------------
+        # Research
+        # -----------------------------
+
+        research = [
+
+            "ieee.org",
+
+            "arxiv.org",
+
+            "springer.com",
+
+            "nature.com",
+
+            "sciencedirect.com",
+
+            "fraunhofer.de"
+
+        ]
+
+        for item in research:
+
+            if item in domain:
+
+                return 9
+
+        # -----------------------------
+        # Open Source
+        # -----------------------------
+
+        opensource = [
+
+            "github.com",
+
+            "huggingface.co"
+
+        ]
+
+        for item in opensource:
+
+            if item in domain:
+
+                return 8
+
+        # -----------------------------
+        # Medium Quality
+        # -----------------------------
+
+        for item in self.config.get(
+            "medium_quality_domains",
+            []
+        ):
+
+            if item in domain:
+
+                return 6
+
+        # -----------------------------
+        # Wikipedia
+        # -----------------------------
+
+        if "wikipedia.org" in domain:
 
             return 5
 
-        if level == "LOW":
+        # -----------------------------
+        # Government
+        # -----------------------------
+
+        if domain.endswith(".gov"):
+
+            return 8
+
+        if domain.endswith(".gov.uk"):
+
+            return 8
+
+        if domain.endswith(".eu"):
+
+            return 7
+
+        # -----------------------------
+        # Universities
+        # -----------------------------
+
+        if domain.endswith(".edu"):
+
+            return 8
+
+        if domain.endswith(".ac.uk"):
+
+            return 8
+
+        # -----------------------------
+        # LinkedIn
+        # -----------------------------
+
+        if "linkedin.com" in domain:
 
             return 2
 
-        return 3
+        # -----------------------------
+        # Social Media
+        # -----------------------------
 
-    # ======================================================
-    # Internal Helpers
-    # ======================================================
+        social = [
 
-    def _normalize_domain(
-        self,
-        url: str
-    ) -> str:
+            "facebook.com",
+
+            "instagram.com",
+
+            "x.com",
+
+            "twitter.com",
+
+            "tiktok.com"
+
+        ]
+
+        for item in social:
+
+            if item in domain:
+
+                return 1
+
+        # -----------------------------
+        # Unknown
+        # -----------------------------
+
+        return 4
+
+    # ==========================================================
+    # Category
+    # ==========================================================
+
+    def category(self, url: str) -> str:
+
+        domain = self._extract_domain(url)
+
+        if any(x in domain for x in [
+
+            "bosch",
+
+            "bmw",
+
+            "continental",
+
+            "volkswagen",
+
+            "mercedes",
+
+            "aptiv",
+
+            "valeo"
+
+        ]):
+
+            return "OEM / Automotive"
+
+        if any(x in domain for x in [
+
+            "ieee",
+
+            "arxiv",
+
+            "springer",
+
+            "nature",
+
+            "fraunhofer"
+
+        ]):
+
+            return "Research"
+
+        if any(x in domain for x in [
+
+            "github",
+
+            "huggingface"
+
+        ]):
+
+            return "Open Source"
+
+        if "wikipedia.org" in domain:
+
+            return "Reference"
+
+        if "linkedin.com" in domain:
+
+            return "Social"
+
+        return "General"
+
+    # ==========================================================
+    # Normalize Domain
+    # ==========================================================
+
+    def _extract_domain(self, url: str) -> str:
 
         try:
 
             domain = urlparse(url).netloc.lower()
 
-            prefixes = (
-
+            domain = domain.replace(
                 "www.",
-
-                "m.",
-
-                "blog."
-
+                ""
             )
-
-            for prefix in prefixes:
-
-                if domain.startswith(prefix):
-
-                    domain = domain[len(prefix):]
 
             return domain
 
         except Exception:
 
             return ""
-
-    def _is_blocked(
-        self,
-        domain: str
-    ) -> bool:
-
-        blocked: List[str] = self.config.get(
-
-            "blocked_domains",
-
-            []
-
-        )
-
-        return any(
-
-            item in domain
-
-            for item in blocked
-
-        )
-
-    def _domain_level(
-        self,
-        domain: str
-    ) -> str:
-
-        high = self.config.get(
-
-            "high_quality_domains",
-
-            []
-
-        )
-
-        if any(item in domain for item in high):
-
-            return "HIGH"
-
-        medium = self.config.get(
-
-            "medium_quality_domains",
-
-            []
-
-        )
-
-        if any(item in domain for item in medium):
-
-            return "MEDIUM"
-
-        # Well-known reference websites
-
-        if "ieee.org" in domain:
-
-            return "HIGH"
-
-        if "arxiv.org" in domain:
-
-            return "HIGH"
-
-        if "github.com" in domain:
-
-            return "HIGH"
-
-        if "wikipedia.org" in domain:
-
-            return "LOW"
-
-        if "linkedin.com" in domain:
-
-            return "LOW"
-
-        return "NORMAL"

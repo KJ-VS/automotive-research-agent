@@ -1,50 +1,176 @@
+"""
+Statistics Panel
+
+Displays research statistics and
+search analytics.
+
+Version
+-------
+V1.3
+"""
+
 import streamlit as st
 
 
-def show_statistics(statistics: dict | None):
-    """
-    Display workflow statistics.
-    """
+def show_statistics(result):
 
-    st.subheader("Statistics")
+    st.subheader("Research Statistics")
 
-    if statistics is None:
+    if not result:
 
-        statistics = {
+        col1, col2, col3, col4 = st.columns(4)
 
-            "retrieved": 0,
-            "filtered": 0,
-            "downloaded": 0,
-            "time": 0
+        col1.metric("Retrieved", "-")
+        col2.metric("Downloaded", "-")
+        col3.metric("Time", "-")
+        col4.metric("Status", "-")
 
-        }
+        return
+
+    statistics = result.get(
+        "statistics",
+        {}
+    )
+
+    analytics = result.get(
+        "analytics",
+        {}
+    )
+
+    # =====================================================
+    # Research Statistics
+    # =====================================================
 
     col1, col2, col3, col4 = st.columns(4)
 
-    with col1:
+    col1.metric(
 
-        st.metric(
-            "Retrieved",
-            statistics["retrieved"]
+        "Retrieved",
+
+        statistics.get(
+
+            "retrieved",
+
+            0
+
         )
 
-    with col2:
+    )
 
-        st.metric(
-            "Filtered",
-            statistics["filtered"]
+    col2.metric(
+
+        "Downloaded",
+
+        statistics.get(
+
+            "downloaded",
+
+            0
+
         )
 
-    with col3:
+    )
 
-        st.metric(
-            "Downloaded",
-            statistics["downloaded"]
+    col3.metric(
+
+        "Time (s)",
+
+        statistics.get(
+
+            "time",
+
+            0
+
         )
 
-    with col4:
+    )
 
-        st.metric(
-            "Time",
-            f"{statistics['time']} s"
+    col4.metric(
+
+        "Status",
+
+        result.get(
+
+            "status",
+
+            "-"
+
         )
+
+    )
+
+    st.divider()
+
+    # =====================================================
+    # Search Analytics
+    # =====================================================
+
+    st.subheader("Search Analytics")
+
+    col1, col2, col3 = st.columns(3)
+
+    col1.metric(
+
+        "Average Score",
+
+        analytics.get(
+
+            "average_score",
+
+            0
+
+        )
+
+    )
+
+    col2.metric(
+
+        "Top Score",
+
+        analytics.get(
+
+            "top_score",
+
+            0
+
+        )
+
+    )
+
+    col3.metric(
+
+        "Best Domain",
+
+        analytics.get(
+
+            "best_domain",
+
+            "-"
+
+        )
+
+    )
+
+    col4, col5 = st.columns(2)
+
+    col4.metric(
+
+        "Avg Domain",
+
+        analytics.get(
+
+            "average_domain_score",
+
+            0
+
+        )
+
+    )
+
+    col5.metric(
+
+        "Avg Content",
+
+        f"{analytics.get('average_content_length',0)} chars"
+
+    )

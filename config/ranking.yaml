@@ -1,0 +1,36 @@
+# ==========================================================
+# Enterprise Ranking Configuration
+# Version: V1.3.6
+# ==========================================================
+
+weights:
+
+  domain: 40
+
+  title: 25
+
+  snippet: 15
+
+  content: 15
+
+  freshness: 5
+
+
+penalty:
+
+  linkedin: 10
+
+  wikipedia: 3
+
+  duplicate: 5
+
+
+limits:
+
+  title_max: 25
+
+  snippet_max: 15
+
+  content_max: 15
+
+  overall_max: 100
